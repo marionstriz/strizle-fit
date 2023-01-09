@@ -6,7 +6,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 	ProjectSection(SolutionItems) = preProject
 		..\README.md = ..\README.md
 		.gitignore = .gitignore
-		..\Directory.Build.props = ..\Directory.Build.props
+		Directory.Build.props = Directory.Build.props
+		docker-compose.yml = docker-compose.yml
+		.dockerignore = .dockerignore
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Base", "Base", "{5F55FBB2-B7AF-4148-83C8-20FDAAE4991A}"
