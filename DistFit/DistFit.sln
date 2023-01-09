@@ -6,7 +6,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 	ProjectSection(SolutionItems) = preProject
 		..\README.md = ..\README.md
 		.gitignore = .gitignore
+		..\Directory.Build.props = ..\Directory.Build.props
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Base", "Base", "{5F55FBB2-B7AF-4148-83C8-20FDAAE4991A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Base.Contracts", "Base.Contracts", "{3E5E5FE8-A71E-48E0-9371-AE98A0492232}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.Contracts.Domain", "Base.Contracts.Domain\Base.Contracts.Domain.csproj", "{8677C96A-CBB6-4AA0-9389-F82A2EA230FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.Domain", "Base.Domain\Base.Domain.csproj", "{8A3AC482-E92B-4FD6-A74B-50A53283BC7B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{1184A0AF-95D9-41C7-864E-01489B18E7C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Domain", "App.Domain\App.Domain.csproj", "{0E71948F-7848-48D5-8837-E42615A4CA99}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +31,22 @@ Global
 		{AEF3B5A7-70E0-437B-80CB-07645B07DE74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEF3B5A7-70E0-437B-80CB-07645B07DE74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AEF3B5A7-70E0-437B-80CB-07645B07DE74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8677C96A-CBB6-4AA0-9389-F82A2EA230FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8677C96A-CBB6-4AA0-9389-F82A2EA230FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8677C96A-CBB6-4AA0-9389-F82A2EA230FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8677C96A-CBB6-4AA0-9389-F82A2EA230FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A3AC482-E92B-4FD6-A74B-50A53283BC7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A3AC482-E92B-4FD6-A74B-50A53283BC7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A3AC482-E92B-4FD6-A74B-50A53283BC7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A3AC482-E92B-4FD6-A74B-50A53283BC7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E71948F-7848-48D5-8837-E42615A4CA99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E71948F-7848-48D5-8837-E42615A4CA99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E71948F-7848-48D5-8837-E42615A4CA99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E71948F-7848-48D5-8837-E42615A4CA99}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8677C96A-CBB6-4AA0-9389-F82A2EA230FC} = {3E5E5FE8-A71E-48E0-9371-AE98A0492232}
+		{8A3AC482-E92B-4FD6-A74B-50A53283BC7B} = {5F55FBB2-B7AF-4148-83C8-20FDAAE4991A}
+		{0E71948F-7848-48D5-8837-E42615A4CA99} = {1184A0AF-95D9-41C7-864E-01489B18E7C6}
 	EndGlobalSection
 EndGlobal
