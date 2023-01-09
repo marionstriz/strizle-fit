@@ -4,11 +4,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{25F5E527-AC5C-479C-9919-10D69242E2FE}"
 	ProjectSection(SolutionItems) = preProject
-		..\README.md = ..\README.md
 		.gitignore = .gitignore
 		Directory.Build.props = Directory.Build.props
 		docker-compose.yml = docker-compose.yml
 		.dockerignore = .dockerignore
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Base", "Base", "{5F55FBB2-B7AF-4148-83C8-20FDAAE4991A}"
@@ -22,6 +22,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{1184A0AF-95D9-41C7-864E-01489B18E7C6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Domain", "App.Domain\App.Domain.csproj", "{0E71948F-7848-48D5-8837-E42615A4CA99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.DAL.EF", "App.DAL.EF\App.DAL.EF.csproj", "{5C723D5F-DB5C-409F-A1E1-3597F3604240}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,10 +47,16 @@ Global
 		{0E71948F-7848-48D5-8837-E42615A4CA99}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E71948F-7848-48D5-8837-E42615A4CA99}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E71948F-7848-48D5-8837-E42615A4CA99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C723D5F-DB5C-409F-A1E1-3597F3604240}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C723D5F-DB5C-409F-A1E1-3597F3604240}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C723D5F-DB5C-409F-A1E1-3597F3604240}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C723D5F-DB5C-409F-A1E1-3597F3604240}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8677C96A-CBB6-4AA0-9389-F82A2EA230FC} = {3E5E5FE8-A71E-48E0-9371-AE98A0492232}
 		{8A3AC482-E92B-4FD6-A74B-50A53283BC7B} = {5F55FBB2-B7AF-4148-83C8-20FDAAE4991A}
 		{0E71948F-7848-48D5-8837-E42615A4CA99} = {1184A0AF-95D9-41C7-864E-01489B18E7C6}
+		{5C723D5F-DB5C-409F-A1E1-3597F3604240} = {1184A0AF-95D9-41C7-864E-01489B18E7C6}
+		{AEF3B5A7-70E0-437B-80CB-07645B07DE74} = {1184A0AF-95D9-41C7-864E-01489B18E7C6}
 	EndGlobalSection
 EndGlobal
