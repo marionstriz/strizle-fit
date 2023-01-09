@@ -431,7 +431,6 @@ namespace App.DAL.EF.Migrations
                     Weight = table.Column<decimal>(type: "numeric(12,3)", precision: 12, scale: 3, nullable: true),
                     WeightUnitId = table.Column<Guid>(type: "uuid", nullable: true),
                     PerformanceId = table.Column<Guid>(type: "uuid", nullable: false),
-                    FilePath = table.Column<string>(type: "character varying(1024)", maxLength: 1024, nullable: true),
                     CreatedBy = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedBy = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),

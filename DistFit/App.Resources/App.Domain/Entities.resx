@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="MeasurementTypeId" xml:space="preserve">
+        <value>Measurement type ID</value>
+    </data>
+    <data name="MeasurementType" xml:space="preserve">
+        <value>Measurement type</value>
+    </data>
+    <data name="ValueUnitId" xml:space="preserve">
+        <value>Value unit ID</value>
+    </data>
+    <data name="ValueUnit" xml:space="preserve">
+        <value>Value unit</value>
+    </data>
+    <data name="ReachedAt" xml:space="preserve">
+        <value>Reached at</value>
+    </data>
+    <data name="ExerciseTypeId" xml:space="preserve">
+        <value>Exercise type ID</value>
+    </data>
+    <data name="ExerciseType" xml:space="preserve">
+        <value>Exercise type</value>
+    </data>
+    <data name="CountryId" xml:space="preserve">
+        <value>Country ID</value>
+    </data>
+    <data name="Country" xml:space="preserve">
+        <value>Country</value>
+    </data>
+    <data name="Leaderboard" xml:space="preserve">
+        <value>Leaderboard</value>
+    </data>
+    <data name="LeaderboardId" xml:space="preserve">
+        <value>Leaderboard ID</value>
+    </data>
+    <data name="PerformedAt" xml:space="preserve">
+        <value>Performed at</value>
+    </data>
+    <data name="Exercise" xml:space="preserve">
+        <value>Exercise</value>
+    </data>
+    <data name="ExerciseId" xml:space="preserve">
+        <value>Exercise ID</value>
+    </data>
+    <data name="IsPublic" xml:space="preserve">
+        <value>Is public</value>
+    </data>
+    <data name="Duration" xml:space="preserve">
+        <value>Duration</value>
+    </data>
+    <data name="DurationUnit" xml:space="preserve">
+        <value>Duration unit</value>
+    </data>
+    <data name="DurationUnitId" xml:space="preserve">
+        <value>Duration unit ID</value>
+    </data>
+    <data name="ProgramId" xml:space="preserve">
+        <value>Program ID</value>
+    </data>
+    <data name="Program" xml:space="preserve">
+        <value>Program</value>
+    </data>
+    <data name="IsCreator" xml:space="preserve">
+        <value>Is creator</value>
+    </data>
+    <data name="Session" xml:space="preserve">
+        <value>Session</value>
+    </data>
+    <data name="SessionId" xml:space="preserve">
+        <value>Session ID</value>
+    </data>
+    <data name="Performance" xml:space="preserve">
+        <value>Performance</value>
+    </data>
+    <data name="PerformanceId" xml:space="preserve">
+        <value>Performance ID</value>
+    </data>
+    <data name="QuantityUnit" xml:space="preserve">
+        <value>Quantity unit</value>
+    </data>
+    <data name="QuantityUnitId" xml:space="preserve">
+        <value>Quantity unit ID</value>
+    </data>
+    <data name="WeightUnit" xml:space="preserve">
+        <value>Weight unit</value>
+    </data>
+    <data name="WeightUnitId" xml:space="preserve">
+        <value>Weight unit ID</value>
+    </data>
+    <data name="Reps" xml:space="preserve">
+        <value>Reps</value>
+    </data>
+    <data name="Sets" xml:space="preserve">
+        <value>Sets</value>
+    </data>
+    <data name="UserExercise" xml:space="preserve">
+        <value>User exercise</value>
+    </data>
+    <data name="UserExerciseId" xml:space="preserve">
+        <value>User exercise ID</value>
+    </data>
+    <data name="SessionExercise" xml:space="preserve">
+        <value>Session exercise</value>
+    </data>
+    <data name="SessionExerciseId" xml:space="preserve">
+        <value>Session exercise ID</value>
+    </data>
+</root>

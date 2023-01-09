@@ -1,0 +1,119 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="MeasurementTypeId" xml:space="preserve">
+        <value>Mõõdu liigi ID</value>
+    </data>
+    <data name="MeasurementType" xml:space="preserve">
+        <value>Mõõdu liik</value>
+    </data>
+    <data name="ValueUnitId" xml:space="preserve">
+        <value>Väärtuse ühiku ID</value>
+    </data>
+    <data name="ValueUnit" xml:space="preserve">
+        <value>Väärtuse ühik</value>
+    </data>
+    <data name="ReachedAt" xml:space="preserve">
+        <value>Saavutatud</value>
+    </data>
+    <data name="ExerciseTypeId" xml:space="preserve">
+        <value>Harjutuse liigi ID</value>
+    </data>
+    <data name="ExerciseType" xml:space="preserve">
+        <value>Harjutuse liik</value>
+    </data>
+    <data name="CountryId" xml:space="preserve">
+        <value>Riigi ID</value>
+    </data>
+    <data name="Country" xml:space="preserve">
+        <value>Riik</value>
+    </data>
+    <data name="Leaderboard" xml:space="preserve">
+        <value>Edetabel</value>
+    </data>
+    <data name="LeaderboardId" xml:space="preserve">
+        <value>Edetabeli ID</value>
+    </data>
+    <data name="PerformedAt" xml:space="preserve">
+        <value>Sooritatud</value>
+    </data>
+    <data name="Exercise" xml:space="preserve">
+        <value>Harjutus</value>
+    </data>
+    <data name="ExerciseId" xml:space="preserve">
+        <value>Harjutuse ID</value>
+    </data>
+    <data name="IsPublic" xml:space="preserve">
+        <value>Avalik</value>
+    </data>
+    <data name="Duration" xml:space="preserve">
+        <value>Kestus</value>
+    </data>
+    <data name="DurationUnit" xml:space="preserve">
+        <value>Kestuse ühik</value>
+    </data>
+    <data name="DurationUnitId" xml:space="preserve">
+        <value>Kestuse ühiku ID</value>
+    </data>
+    <data name="ProgramId" xml:space="preserve">
+        <value>Kava ID</value>
+    </data>
+    <data name="Program" xml:space="preserve">
+        <value>Kava</value>
+    </data>
+    <data name="IsCreator" xml:space="preserve">
+        <value>Looja</value>
+    </data>
+    <data name="Session" xml:space="preserve">
+        <value>Sessioon</value>
+    </data>
+    <data name="SessionId" xml:space="preserve">
+        <value>Sessiooni ID</value>
+    </data>
+    <data name="Performance" xml:space="preserve">
+        <value>Sooritus</value>
+    </data>
+    <data name="PerformanceId" xml:space="preserve">
+        <value>Soorituse ID</value>
+    </data>
+    <data name="QuantityUnit" xml:space="preserve">
+        <value>Koguse ühik</value>
+    </data>
+    <data name="QuantityUnitId" xml:space="preserve">
+        <value>Koguse ühiku ID</value>
+    </data>
+    <data name="WeightUnit" xml:space="preserve">
+        <value>Kaalu ühik</value>
+    </data>
+    <data name="WeightUnitId" xml:space="preserve">
+        <value>Kaalu ühiku ID</value>
+    </data>
+    <data name="Reps" xml:space="preserve">
+        <value>Kordused</value>
+    </data>
+    <data name="Sets" xml:space="preserve">
+        <value>Setid</value>
+    </data>
+    <data name="UserExercise" xml:space="preserve">
+        <value>Kasutaja harjutus</value>
+    </data>
+    <data name="UserExerciseId" xml:space="preserve">
+        <value>Kasutaja harjutuse ID</value>
+    </data>
+    <data name="SessionExercise" xml:space="preserve">
+        <value>Sessiooni harjutus</value>
+    </data>
+    <data name="SessionExerciseId" xml:space="preserve">
+        <value>Sessiooni harjutuse ID</value>
+    </data>
+</root>

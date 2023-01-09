@@ -495,10 +495,6 @@ namespace App.DAL.EF.Migrations
                         .HasMaxLength(32)
                         .HasColumnType("character varying(32)");
 
-                    b.Property<string>("FilePath")
-                        .HasMaxLength(1024)
-                        .HasColumnType("character varying(1024)");
-
                     b.Property<Guid>("PerformanceId")
                         .HasColumnType("uuid");
 
@@ -737,7 +733,7 @@ namespace App.DAL.EF.Migrations
             modelBuilder.Entity("App.Domain.Goal", b =>
                 {
                     b.HasOne("App.Domain.Identity.AppUser", "AppUser")
-                        .WithMany()
+                        .WithMany("Goals")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -770,7 +766,7 @@ namespace App.DAL.EF.Migrations
             modelBuilder.Entity("App.Domain.Measurement", b =>
                 {
                     b.HasOne("App.Domain.Identity.AppUser", "AppUser")
-                        .WithMany()
+                        .WithMany("Measurements")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -818,7 +814,7 @@ namespace App.DAL.EF.Migrations
             modelBuilder.Entity("App.Domain.ProgramSaved", b =>
                 {
                     b.HasOne("App.Domain.Identity.AppUser", "AppUser")
-                        .WithMany()
+                        .WithMany("ProgramSaves")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Restrict);
 
@@ -892,7 +888,7 @@ namespace App.DAL.EF.Migrations
             modelBuilder.Entity("App.Domain.UserExercise", b =>
                 {
                     b.HasOne("App.Domain.Identity.AppUser", "AppUser")
-                        .WithMany()
+                        .WithMany("Exercises")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -985,6 +981,17 @@ namespace App.DAL.EF.Migrations
                     b.Navigation("SessionExercises");
 
                     b.Navigation("UserExercises");
+                });
+
+            modelBuilder.Entity("App.Domain.Identity.AppUser", b =>
+                {
+                    b.Navigation("Exercises");
+
+                    b.Navigation("Goals");
+
+                    b.Navigation("Measurements");
+
+                    b.Navigation("ProgramSaves");
                 });
 
             modelBuilder.Entity("App.Domain.MeasurementType", b =>

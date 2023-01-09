@@ -4,14 +4,15 @@ namespace Base.Domain;
 
 public class LangStr : Dictionary<string, string>
 {
-    public const string DefaultCulture = "en-GB";
+    public const string DefaultCulture = "en-US";
     public static readonly List<string> SupportedCultures = new()
     {
         DefaultCulture,
         "et-EE"
     };
-
-    public LangStr() { }
+    
+    public LangStr() {}
+    
     public LangStr(string value) : this(value, Thread.CurrentThread.CurrentUICulture.Name) { }
     
     public LangStr(string value, string culture)

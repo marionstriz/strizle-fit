@@ -95,7 +95,7 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
     {
         if (jsonStr != null)
         {
-            return System.Text.Json.JsonSerializer.Deserialize<LangStr>(jsonStr) ?? new LangStr();
+            return System.Text.Json.JsonSerializer.Deserialize<LangStr>(jsonStr) ?? new LangStr("");
         }
         return null;
     }
@@ -143,6 +143,7 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
                 if (originalValue == null)
                     continue;
 
+                originalValue = originalValue.Value.ToUniversalTime();
                 prop.SetValue(entity, DateTime.SpecifyKind(originalValue.Value, DateTimeKind.Utc));
             }
         }

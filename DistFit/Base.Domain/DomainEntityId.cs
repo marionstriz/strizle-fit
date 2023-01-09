@@ -10,6 +10,6 @@ public abstract class DomainEntityId : DomainEntityId<Guid>, IDomainEntityId
 public abstract class DomainEntityId<TKey> : IDomainEntityId<TKey> 
     where TKey : IEquatable<TKey>
 {
-    //[Display(ResourceType = typeof(Resources.Common), Name = nameof(Id))]
+    [Display(ResourceType = typeof(Resources.Common), Name = nameof(Id))]
     public TKey Id { get; set; } = default!;
 }

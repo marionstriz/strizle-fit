@@ -15,10 +15,12 @@ dotnet ef database drop --project App.DAL.EF --startup-project WebApp
 #### MVC Razor based
 
 ~~~sh
-dotnet aspnet-codegenerator controller -name ExerciseTypeController -actions -m App.Domain.ExerciseType -dc AppDbContext -outDir Areas/Admin/Controllers --useDefaultLayout --useAsyncActions --referenceScriptLibraries -f
+dotnet aspnet-codegenerator controller -name ExerciseTypesController -actions -m App.Domain.ExerciseType -dc AppDbContext -outDir Areas/Admin/Controllers --useDefaultLayout --useAsyncActions --referenceScriptLibraries -f
+dotnet aspnet-codegenerator controller -name GoalsController -actions -m App.Domain.Goal -dc AppDbContext -outDir Areas/Admin/Controllers --useDefaultLayout --useAsyncActions --referenceScriptLibraries -f
+dotnet aspnet-codegenerator controller -name UnitsController -actions -m App.Domain.Unit -dc AppDbContext -outDir Areas/Admin/Controllers --useDefaultLayout --useAsyncActions --referenceScriptLibraries -f
 ~~~
 
 #### WebApi
 ~~~sh
-dotnet aspnet-codegenerator controller -name MeasurementController -actions -m App.Domain.Measurement -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
+dotnet aspnet-codegenerator controller -name ExerciseTypesController -actions -m App.Domain.ExerciseType -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
 ~~~

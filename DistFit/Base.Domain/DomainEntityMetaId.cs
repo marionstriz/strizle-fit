@@ -12,16 +12,16 @@ public abstract class DomainEntityMetaId<TKey> : DomainEntityId<TKey>, IDomainEn
     where TKey : IEquatable<TKey>
 {
     [MaxLength(32)]
-    //[Display(ResourceType = typeof(Resources.Common), Name = nameof(CreatedBy))]
+    [Display(ResourceType = typeof(Resources.Common), Name = nameof(CreatedBy))]
     public string? CreatedBy { get; set; }
-    //[Display(ResourceType = typeof(Resources.Common), Name = nameof(CreatedAt))]
+    [Display(ResourceType = typeof(Resources.Common), Name = nameof(CreatedAt))]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     [MaxLength(32)]
-    //[Display(ResourceType = typeof(Resources.Common), Name = nameof(UpdatedBy))]
+    [Display(ResourceType = typeof(Resources.Common), Name = nameof(UpdatedBy))]
     public string? UpdatedBy { get; set; }
-    //[Display(ResourceType = typeof(Resources.Common), Name = nameof(UpdatedAt))]
+    [Display(ResourceType = typeof(Resources.Common), Name = nameof(UpdatedAt))]
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     [MaxLength(1024)]
-    //[Display(ResourceType = typeof(Resources.Common), Name = nameof(Comment))]
+    [Display(ResourceType = typeof(Resources.Common), Name = nameof(Comment))]
     public string? Comment { get; set; }
 }

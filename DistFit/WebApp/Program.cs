@@ -1,7 +1,11 @@
+using System.Globalization;
 using App.DAL.EF;
 using App.Domain.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using WebApp;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,9 +24,33 @@ builder.Services.AddIdentity<AppUser, AppRole>(options => options.SignIn.Require
 
 builder.Services.AddControllersWithViews();
 
+var supportedCultures = builder.Configuration
+    .GetSection("SupportedCultures")
+    .GetChildren()
+    .Select(x => new CultureInfo(x.Value!))
+    .ToArray();
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+    options.DefaultRequestCulture =
+        new RequestCulture(
+            builder.Configuration["DefaultCulture"]!, 
+            builder.Configuration["DefaultCulture"]!);
+    options.SetDefaultCulture(builder.Configuration["DefaultCulture"]!);
+    options.RequestCultureProviders = new List<IRequestCultureProvider>
+    {
+        new QueryStringRequestCultureProvider(),
+        new CookieRequestCultureProvider()
+    };
+});
+
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
+
+AppDataHelper.SetupAppData(app, app.Environment, app.Configuration);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -40,6 +68,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseRequestLocalization(options: 
+    app.Services.GetService<IOptions<RequestLocalizationOptions>>()?.Value!);
 
 app.UseAuthentication();
 app.UseAuthorization();

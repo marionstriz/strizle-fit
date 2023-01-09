@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using App.DAL.EF;
 using App.Domain;
@@ -11,16 +6,16 @@ using App.Domain;
 namespace WebApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class ExerciseTypeController : Controller
+    public class ExerciseTypesController : Controller
     {
         private readonly AppDbContext _context;
 
-        public ExerciseTypeController(AppDbContext context)
+        public ExerciseTypesController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: Admin/ExerciseType
+        // GET: Admin/ExerciseTypes
         public async Task<IActionResult> Index()
         {
               return _context.ExerciseTypes != null ? 
@@ -28,7 +23,7 @@ namespace WebApp.Areas.Admin.Controllers
                           Problem("Entity set 'AppDbContext.ExerciseTypes'  is null.");
         }
 
-        // GET: Admin/ExerciseType/Details/5
+        // GET: Admin/ExerciseTypes/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null || _context.ExerciseTypes == null)
@@ -46,13 +41,13 @@ namespace WebApp.Areas.Admin.Controllers
             return View(exerciseType);
         }
 
-        // GET: Admin/ExerciseType/Create
+        // GET: Admin/ExerciseTypes/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Admin/ExerciseType/Create
+        // POST: Admin/ExerciseTypes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -69,7 +64,7 @@ namespace WebApp.Areas.Admin.Controllers
             return View(exerciseType);
         }
 
-        // GET: Admin/ExerciseType/Edit/5
+        // GET: Admin/ExerciseTypes/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null || _context.ExerciseTypes == null)
@@ -85,7 +80,7 @@ namespace WebApp.Areas.Admin.Controllers
             return View(exerciseType);
         }
 
-        // POST: Admin/ExerciseType/Edit/5
+        // POST: Admin/ExerciseTypes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -120,7 +115,7 @@ namespace WebApp.Areas.Admin.Controllers
             return View(exerciseType);
         }
 
-        // GET: Admin/ExerciseType/Delete/5
+        // GET: Admin/ExerciseTypes/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null || _context.ExerciseTypes == null)
