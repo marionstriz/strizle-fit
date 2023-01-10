@@ -1,10 +1,15 @@
 using System.Globalization;
+using App.BLL;
+using App.Contracts.BLL;
+using App.Contracts.DAL;
 using App.DAL.EF;
 using App.Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using WebApp;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +26,14 @@ builder.Services.AddIdentity<AppUser, AppRole>(options => options.SignIn.Require
     .AddDefaultUI()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.AddScoped<IAppUnitOfWork, AppUow>();
+builder.Services.AddScoped<IAppBll, AppBll>();
+
+builder.Services.AddAutoMapper(
+    typeof(App.DAL.EF.AutomapperConfig),
+    typeof(App.BLL.AutomapperConfig),
+    typeof(App.Public.v1.AutomapperConfig));
 
 builder.Services.AddControllersWithViews();
 
@@ -45,6 +58,18 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
         new CookieRequestCultureProvider()
     };
 });
+
+builder.Services.AddApiVersioning(options =>
+    {
+        options.ReportApiVersions = true;
+        // in case of no explicit version
+        options.DefaultApiVersion = new ApiVersion(1, 0);
+    }
+);
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddVersionedApiExplorer( options => options.GroupNameFormat = "'v'VVV" );
+builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddRazorPages();
 
