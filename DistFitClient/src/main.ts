@@ -1,4 +1,5 @@
 import 'jquery';
+import '@popperjs/core'
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../static/site.css';

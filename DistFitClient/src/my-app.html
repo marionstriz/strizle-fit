@@ -1,9 +1,17 @@
+<import from="./components/page-header.html"></import>
+<import from="./views/measurements/Measurements"></import>
+
+<page-header></page-header>
+
 <section class="vh-100 gradient-custom">
-    <div class="container py-5 h-100">
+    <div class="container pb-5 pt-1 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col col-xl-10">
-  
-          <div class="card">
+
+          <measurements></measurements>
+
+
+            <!--
             <div class="card-body p-5">
   
               <div class="d-flex justify-content-center align-items-center mb-4">
@@ -12,7 +20,7 @@
                   <input value.bind="newTypeName" keydown.trigger="addNewItemKeyDown($event)" type="text" class="form-control" />
                 </div>
                 <button click.trigger="addNewItemOnClick()" class="mastri-add-button btn btn-info ms-2">Add</button>
-            </div>
+              </div>
   
               <div>
                   <ul class="list-group mb-0">
@@ -26,7 +34,7 @@
               </div>
   
             </div>
-          </div>
+            -->
   
         </div>
       </div>

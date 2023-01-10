@@ -1,0 +1,9 @@
+<div class="list-group">
+  <div repeat.for="measurementType of measurementTypes">
+    <a href="#" class="list-group-item list-group-item-action ${measurementType === activeMeasurementType ? 'active' : ''}"
+    click.trigger="makeActive($index)">
+      ${measurementType.name}
+    </a>
+  </div>
+    <!--<a href="#" class="list-group-item list-group-item-action disabled">Vestibulum at eros</a>-->
+</div>
