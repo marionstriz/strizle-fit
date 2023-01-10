@@ -1,0 +1,49 @@
+{
+  "name": "DistFitClient",
+  "description": "An Aurelia 2 client application.",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "???"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "aurelia": "latest",
+    "bootstrap": "^5.2.3",
+    "jquery": "^3.6.3"
+  },
+  "devDependencies": {
+    "@aurelia/testing": "latest",
+    "@aurelia/webpack-loader": "latest",
+    "@types/bootstrap": "^5.2.6",
+    "@types/jquery": "^3.5.16",
+    "@types/node": "^18.11.18",
+    "@typescript-eslint/eslint-plugin": "^5.47.1",
+    "@typescript-eslint/parser": "^5.47.1",
+    "autoprefixer": "^10.4.13",
+    "css-loader": "^6.7.3",
+    "dotenv-webpack": "^8.0.1",
+    "eslint": "^8.30.0",
+    "html-webpack-plugin": "^5.5.0",
+    "htmlhint": "^1.1.4",
+    "postcss": "^8.4.20",
+    "postcss-loader": "^7.0.2",
+    "rimraf": "^3.0.2",
+    "style-loader": "^3.3.1",
+    "ts-loader": "^9.4.2",
+    "tslib": "^2.4.1",
+    "typescript": "^4.9.4",
+    "webpack": "^5.75.0",
+    "webpack-bundle-analyzer": "^4.7.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.11.1"
+  },
+  "scripts": {
+    "lint:js": "eslint src test --ext .js,.ts",
+    "lint:html": "htmlhint -c .htmlhintrc src",
+    "lint": "npm run lint:js && npm run lint:html",
+    "start": "webpack serve",
+    "build": "rimraf dist && webpack --env production",
+    "analyze": "rimraf dist && webpack --env production --analyze"
+  }
+}

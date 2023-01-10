@@ -1,0 +1,34 @@
+<section class="vh-100 gradient-custom">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col col-xl-10">
+  
+          <div class="card">
+            <div class="card-body p-5">
+  
+              <div class="d-flex justify-content-center align-items-center mb-4">
+                <div class="form-outline flex-fill">
+                    <h2>${message}</h2>
+                  <input value.bind="newTypeName" keydown.trigger="addNewItemKeyDown($event)" type="text" class="form-control" />
+                </div>
+                <button click.trigger="addNewItemOnClick()" class="mastri-add-button btn btn-info ms-2">Add</button>
+            </div>
+  
+              <div>
+                  <ul class="list-group mb-0">
+
+                    <li repeat.for="exerciseType of exerciseTypes"
+                    class="list-group-item d-flex align-items-center border-0 mb-2 rounded"
+                      style="background-color: #f4f6f7;">
+                      <span class="w-100">${exerciseType.name}</span>
+                      <button click.trigger="removeItem($index, $event)" type="button" class="btn-close flex-shrink-1" aria-label="Close"></button>
+                    </li>
+              </div>
+  
+            </div>
+          </div>
+  
+        </div>
+      </div>
+    </div>
+  </section>
