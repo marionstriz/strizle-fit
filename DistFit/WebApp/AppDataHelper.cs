@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using App.DAL.EF;
 using App.Domain;
 using App.Domain.Identity;
@@ -100,6 +101,8 @@ public static class AppDataHelper
                     {
                         throw new ApplicationException("Cannot create user!");
                     }
+                    var claim1 = userManager.AddClaimAsync(user, new Claim("aspnet.firstname", user.FirstName)).Result;
+                    var claim2 = userManager.AddClaimAsync(user, new Claim("aspnet.lastname", user.LastName)).Result;
                 }
 
                 if (!string.IsNullOrWhiteSpace(userInfo.roles))

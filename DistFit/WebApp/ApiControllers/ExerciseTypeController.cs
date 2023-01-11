@@ -13,6 +13,7 @@ namespace WebApp.ApiControllers;
 [ApiVersion( "1.0" )]
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiController]
+[Authorize]
 public class ExerciseTypeController : ControllerBase
 {
     private readonly IAppBll _bll;

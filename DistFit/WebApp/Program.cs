@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text;
 using App.BLL;
 using App.Contracts.BLL;
 using App.Contracts.DAL;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using WebApp;
 
@@ -26,6 +28,22 @@ builder.Services.AddIdentity<AppUser, AppRole>(options => options.SignIn.Require
     .AddDefaultUI()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services
+    .AddAuthentication()
+    .AddCookie(options => { options.SlidingExpiration = true; })
+    .AddJwtBearer(cfg =>
+    {
+        cfg.RequireHttpsMetadata = false;
+        cfg.SaveToken = true;
+        cfg.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidIssuer = builder.Configuration["JWT:Issuer"],
+            ValidAudience = builder.Configuration["JWT:Issuer"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]!)),
+            ClockSkew = TimeSpan.Zero // remove delay of token when expire
+        };
+    });
 
 builder.Services.AddScoped<IAppUnitOfWork, AppUow>();
 builder.Services.AddScoped<IAppBll, AppBll>();

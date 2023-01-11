@@ -7,12 +7,11 @@ public class AppUser : BaseUser
 {
     [MaxLength(254)]
     [Display(ResourceType = typeof(Base.Resources.Common), Name = nameof(FirstName))]
-    public string? FirstName { get; set; }
+    public string FirstName { get; set; } = default!;
+
     [MaxLength(254)]
     [Display(ResourceType = typeof(Base.Resources.Common), Name = nameof(LastName))]
-    public string? LastName { get; set; }
-    [Display(ResourceType = typeof(Base.Resources.Common), Name = nameof(DateOfBirth))]
-    public DateOnly? DateOfBirth { get; set; }
+    public string LastName { get; set; } = default!;
     
     public ICollection<UserExercise>? Exercises { get; set; }
     public ICollection<Goal>? Goals { get; set; }

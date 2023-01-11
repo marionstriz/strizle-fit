@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using App.Public.v1.Mappers;
 using AutoMapper;
 using Base.Domain;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers;
@@ -13,6 +14,7 @@ namespace WebApp.ApiControllers;
 [ApiVersion( "1.0" )]
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiController]
+[Authorize (AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class MeasurementTypeController : ControllerBase
 {
     private readonly IAppBll _bll;
@@ -31,14 +33,13 @@ public class MeasurementTypeController : ControllerBase
 
     // GET: api/MeasurementType
     /// <summary>
-    /// Get all measurement types available in application
+    /// Get all measurement types available in application, enables authentication
     /// </summary>
     /// <returns>Enumerable of measurement types</returns>
     [Produces( "application/json" )]
     [Consumes( "application/json" )]
     [ProducesResponseType( typeof( IEnumerable<App.Public.DTO.v1.MeasurementType> ), StatusCodes.Status200OK )]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<App.Public.DTO.v1.MeasurementType>>> GetMeasurementTypes()
     {
@@ -56,7 +57,6 @@ public class MeasurementTypeController : ControllerBase
     [ProducesResponseType(typeof(App.Public.DTO.v1.MeasurementType), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<ActionResult<App.Public.DTO.v1.MeasurementType>> GetMeasurementType(Guid id)
     {
@@ -84,6 +84,7 @@ public class MeasurementTypeController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [Authorize(Roles = "admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> PutMeasurementType(Guid id, App.Public.DTO.v1.MeasurementType exerciseType)
     {
@@ -118,6 +119,7 @@ public class MeasurementTypeController : ControllerBase
     [ProducesResponseType(typeof(App.Public.DTO.v1.MeasurementType), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [Authorize(Roles = "admin")]
     [HttpPost]
     public async Task<ActionResult<App.Public.DTO.v1.MeasurementType>> PostMeasurementType(App.Public.DTO.v1.MeasurementType measurementType)
     {
@@ -154,6 +156,7 @@ public class MeasurementTypeController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Authorize(Roles = "admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteMeasurementType(Guid id)
     {

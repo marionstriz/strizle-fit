@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace App.DAL.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230111131419_Initial")]
+    [Migration("20230111141438_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -137,9 +137,6 @@ namespace App.DAL.EF.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("text");
 
-                    b.Property<DateOnly?>("DateOfBirth")
-                        .HasColumnType("date");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
@@ -148,10 +145,12 @@ namespace App.DAL.EF.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasMaxLength(254)
                         .HasColumnType("character varying(254)");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasMaxLength(254)
                         .HasColumnType("character varying(254)");
 

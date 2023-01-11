@@ -69,13 +69,12 @@ public class AccountController : ControllerBase
                 "User/password problem");
 
         var claimsPrincipal = await _signInManager.CreateUserPrincipalAsync(appUser);
-        if (claimsPrincipal == null) return await ClaimsPrincipalError(appUser.Email);
+        if (claimsPrincipal == null) return await ClaimsPrincipalError(appUser.Email!);
 
         var validTokens = GetValidUserRefreshTokens(appUser);
         RefreshToken refreshToken;
         if (validTokens.Count != 0)
         {
-            if (validTokens.Count != 1) return Problem("More than one valid refresh token found");
             refreshToken = validTokens.First();
             UpdateRefreshToken(refreshToken);
         }
@@ -119,6 +118,8 @@ public class AccountController : ControllerBase
         appUser = new AppUser
         {
             Email = registrationData.Email,
+            FirstName = registrationData.FirstName,
+            LastName = registrationData.LastName,
             UserName = registrationData.Email,
             RefreshTokens = new List<RefreshToken> {refreshToken}
         };
@@ -126,15 +127,17 @@ public class AccountController : ControllerBase
         var result = await _userManager.CreateAsync(appUser, registrationData.Password);
         if (!result.Succeeded) return GetBadRequestActionResult("user", result.ToString());
 
+        await _userManager.AddClaimAsync(appUser, new Claim("aspnet.firstname", appUser.FirstName));
+        await _userManager.AddClaimAsync(appUser, new Claim("aspnet.lastname", appUser.LastName));
+
         appUser = await _userManager.FindByEmailAsync(appUser.Email);
         if (appUser == null) return await AccountErrorNotFound(
                 $"user with email {registrationData.Email} is not found after registration",
                 "User with email not found after registration");
 
         var claimsPrincipal = await _signInManager.CreateUserPrincipalAsync(appUser);
-        if (claimsPrincipal == null) return await ClaimsPrincipalError(appUser.Email);
 
-        var res = GenerateJwtResponse(claimsPrincipal, refreshToken.Token, appUser.Email);
+        var res = GenerateJwtResponse(claimsPrincipal, refreshToken.Token, appUser.Email!);
 
         return Ok(res);
     }
@@ -184,7 +187,6 @@ public class AccountController : ControllerBase
         if (validTokens.Count != 1) return Problem("More than one valid refresh token found");
 
         var claimsPrincipal = await _signInManager.CreateUserPrincipalAsync(appUser);
-        if (claimsPrincipal == null) return await ClaimsPrincipalError(appUser.Email);
 
         var refreshToken = validTokens.First();
         if (refreshToken.Token == refreshTokenModel.RefreshToken)
@@ -193,7 +195,7 @@ public class AccountController : ControllerBase
             await _dbContext.SaveChangesAsync();
         }
 
-        var res = GenerateJwtResponse(claimsPrincipal, refreshToken.Token, appUser.Email);
+        var res = GenerateJwtResponse(claimsPrincipal, refreshToken.Token, appUser.Email!);
 
         return Ok(res);
     }
@@ -219,7 +221,9 @@ public class AccountController : ControllerBase
         {
             Token = token,
             RefreshToken = refreshToken,
-            Email = email
+            Email = email,
+            FirstName = claimsPrincipal.Claims.First(c => c.Type.Equals("aspnet.firstname")).Value,
+            LastName = claimsPrincipal.Claims.First(c => c.Type.Equals("aspnet.lastname")).Value
         };
     }
 
