@@ -1,0 +1,27 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand distfit-navbar-item" href="home">DistFit</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-nav-id" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbar-nav-id">
+    <ul class="w-100 navbar-nav">
+      <li if.bind="identityState.user !== null" class="nav-item distfit-navbar-item">
+        <a class="nav-link" href="measurements">Measurements</a>
+      </li if.bind="identityState.user !== null">
+      <div class="d-flex w-100 justify-content-end">
+      <li if.bind="identityState.user === null" class="nav-item distfit-navbar-item">
+        <a class="nav-link" href="login">Sign in</a>
+      </li>
+      <li if.bind="identityState.user === null" class="nav-item distfit-navbar-item distfit-navbar-last-item">
+        <a class="nav-link" href="#">Register</a>
+      </li>
+      <li class="nav-item distfit-navbar-item" if.bind="identityState.user !== null">
+        <span class="nav-link">${identityState.user.email}</span>
+      </li>
+      <li if.bind="identityState.user !== null" class="nav-item distfit-navbar-item distfit-navbar-last-item">
+        <a class="nav-link" click.trigger="logoutAsync()" href="#">Log out</a>
+      </li>
+    </div>
+    </ul>
+  </div>
+</nav>
