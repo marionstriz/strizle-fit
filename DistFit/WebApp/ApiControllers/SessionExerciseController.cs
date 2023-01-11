@@ -2,6 +2,8 @@ using App.Contracts.BLL;
 using Microsoft.AspNetCore.Mvc;
 using App.Public.v1.Mappers;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers;
 
@@ -11,6 +13,7 @@ namespace WebApp.ApiControllers;
 [ApiVersion( "1.0" )]
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiController]
+[Authorize (AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class SessionExerciseController : ControllerBase
 {
     private readonly IAppBll _bll;

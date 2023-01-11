@@ -33,4 +33,16 @@ public class MeasurementRepository
         
         return (await query.ToListAsync()).Select(x => Mapper.Map(x)!);
     }
+
+    public async Task<IEnumerable<Measurement>> GetAllByTypeIdAsync(Guid typeId, Guid userId, bool noTracking)
+    {
+        var query = CreateQuery(noTracking)
+            .Include(u => u.AppUser)
+            .Include(u => u.MeasurementType)
+            .Include(u => u.ValueUnit)
+            .Where(u => u.MeasurementTypeId == typeId)
+            .Where(m => m.AppUserId == userId);
+        
+        return (await query.ToListAsync()).Select(x => Mapper.Map(x)!);
+    }
 }

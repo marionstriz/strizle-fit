@@ -64,12 +64,12 @@ public class AccountController : ControllerBase
             "User/password problem");
 
         var result = await _signInManager.CheckPasswordSignInAsync(appUser, loginData.Password, false);
+        
         if (!result.Succeeded) return await AccountErrorBadRequest(
                 $"password problem for user {loginData.Email}", 
                 "User/password problem");
 
         var claimsPrincipal = await _signInManager.CreateUserPrincipalAsync(appUser);
-        if (claimsPrincipal == null) return await ClaimsPrincipalError(appUser.Email!);
 
         var validTokens = GetValidUserRefreshTokens(appUser);
         RefreshToken refreshToken;
@@ -90,7 +90,7 @@ public class AccountController : ControllerBase
         }
 
         await _dbContext.SaveChangesAsync();
-        var res = GenerateJwtResponse(claimsPrincipal, refreshToken.Token, appUser.Email!);
+        var res = GenerateJwtResponse(claimsPrincipal, refreshToken.Token, appUser);
 
         return Ok(res);
     }
@@ -113,7 +113,7 @@ public class AccountController : ControllerBase
         if (appUser != null) return await AccountErrorBadRequest(
                 $"user with email {registrationData.Email} is already registered",
                 "User with email is already registered");
-
+        
         var refreshToken = new RefreshToken();
         appUser = new AppUser
         {
@@ -121,9 +121,10 @@ public class AccountController : ControllerBase
             FirstName = registrationData.FirstName,
             LastName = registrationData.LastName,
             UserName = registrationData.Email,
+            EmailConfirmed = true,
             RefreshTokens = new List<RefreshToken> {refreshToken}
         };
-
+        
         var result = await _userManager.CreateAsync(appUser, registrationData.Password);
         if (!result.Succeeded) return GetBadRequestActionResult("user", result.ToString());
 
@@ -137,7 +138,7 @@ public class AccountController : ControllerBase
 
         var claimsPrincipal = await _signInManager.CreateUserPrincipalAsync(appUser);
 
-        var res = GenerateJwtResponse(claimsPrincipal, refreshToken.Token, appUser.Email!);
+        var res = GenerateJwtResponse(claimsPrincipal, refreshToken.Token, appUser);
 
         return Ok(res);
     }
@@ -165,9 +166,9 @@ public class AccountController : ControllerBase
                 return GetBadRequestActionResult("token", "No token");
             }
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            return GetBadRequestActionResult("token", $"Can't parse token, {e.Message}");
+            return GetBadRequestActionResult("token", $"Can't parse token");
         }
 
         var userEmail = jwtToken.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
@@ -183,7 +184,9 @@ public class AccountController : ControllerBase
         }
 
         var validTokens = GetValidUserRefreshTokens(appUser, refreshTokenModel);
-        if (!validTokens.Any()) return Problem("RefreshTokens collection is empty, no valid refresh tokens found");
+        if (!validTokens.Any()) 
+            return GetBadRequestActionResult("token", "No valid refresh tokens found");
+        
         if (validTokens.Count != 1) return Problem("More than one valid refresh token found");
 
         var claimsPrincipal = await _signInManager.CreateUserPrincipalAsync(appUser);
@@ -195,7 +198,7 @@ public class AccountController : ControllerBase
             await _dbContext.SaveChangesAsync();
         }
 
-        var res = GenerateJwtResponse(claimsPrincipal, refreshToken.Token, appUser.Email!);
+        var res = GenerateJwtResponse(claimsPrincipal, refreshToken.Token, appUser!);
 
         return Ok(res);
     }
@@ -207,23 +210,24 @@ public class AccountController : ControllerBase
             "could not get ClaimsPrincipal for user");
     }
 
-    private JwtResponse GenerateJwtResponse(ClaimsPrincipal claimsPrincipal, string refreshToken, string email)
+    private JwtResponse GenerateJwtResponse(ClaimsPrincipal claimsPrincipal, string refreshToken, AppUser user)
     {
         var token = IdentityExtensions.GenerateJwt(
             claimsPrincipal.Claims,
             _configuration["JWT:Key"]!,
             _configuration["JWT:Issuer"]!,
             _configuration["JWT:Issuer"]!,
-            DateTime.Now.AddDays(_configuration.GetValue<int>("JWT:ExpireInDays"))
+            DateTime.Now.AddMinutes(_configuration.GetValue<int>("JWT:ExpireInMinutes"))
         );
         
         return new JwtResponse
         {
+            Id = user.Id,
             Token = token,
             RefreshToken = refreshToken,
-            Email = email,
-            FirstName = claimsPrincipal.Claims.First(c => c.Type.Equals("aspnet.firstname")).Value,
-            LastName = claimsPrincipal.Claims.First(c => c.Type.Equals("aspnet.lastname")).Value
+            Email = user.Email!,
+            FirstName = user.FirstName,
+            LastName = user.LastName
         };
     }
 

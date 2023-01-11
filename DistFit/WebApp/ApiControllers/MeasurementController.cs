@@ -3,6 +3,8 @@ using App.Public.v1.Mappers;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Base.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Errors = WebApp.Helpers.RestApiErrorHelpers;
 
 namespace WebApp.ApiControllers;
@@ -13,6 +15,7 @@ namespace WebApp.ApiControllers;
 [ApiVersion( "1.0" )]
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiController]
+[Authorize (AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class MeasurementController : ControllerBase
 {
     private readonly IAppBll _bll;
@@ -69,6 +72,18 @@ public class MeasurementController : ControllerBase
 
         return _mapper.Map(measurement)!;
     }
+    
+    [Produces("application/json")]
+    [Consumes("application/json")]
+    [ProducesResponseType(typeof(App.Public.DTO.v1.Measurement), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpGet("type/{id}")]
+    public async Task<ActionResult<IEnumerable<App.Public.DTO.v1.Measurement>>> GetMeasurementByType(Guid id)
+    {
+        return Ok((await _bll.Measurements.GetAllByTypeIdAsync(User.GetUserId(), id, true))
+            .Select(x => _mapper.Map(x)));
+    }
 
     // PUT: api/Measurement/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -87,16 +102,13 @@ public class MeasurementController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> PutMeasurement(Guid id, App.Public.DTO.v1.Measurement measurement)
     {
-        if (id != measurement.Id || measurement.AppUserId != User.GetUserId())
+        if (id != measurement.Id || measurement.AppUserId != User.GetUserId() || !ModelState.IsValid)
         {
             return BadRequest();
         }
         
-        if (ModelState.IsValid)
-        {
-            _bll.Measurements.Update(_mapper.Map(measurement)!);
-            await _bll.SaveChangesAsync();
-        }
+        _bll.Measurements.Update(_mapper.Map(measurement)!);
+        await _bll.SaveChangesAsync();
 
         return NoContent();
     }
@@ -118,12 +130,11 @@ public class MeasurementController : ControllerBase
     {
         measurement.Id = Guid.NewGuid();
         measurement.AppUserId = User.GetUserId();
+
+        if (!ModelState.IsValid) return BadRequest();
         
-        if (ModelState.IsValid)
-        {
-            _bll.Measurements.Add(_mapper.Map(measurement)!);
-            await _bll.SaveChangesAsync();
-        }
+        _bll.Measurements.Add(_mapper.Map(measurement)!);
+        await _bll.SaveChangesAsync();
 
         return CreatedAtAction("GetMeasurement", new
         {

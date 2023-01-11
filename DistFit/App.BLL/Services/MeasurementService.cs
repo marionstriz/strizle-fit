@@ -20,4 +20,9 @@ public class MeasurementService
     {
         return (await Repository.GetAllAsync(userId, noTracking)).Select(x => Mapper.Map(x)!);
     }
+
+    public async Task<IEnumerable<Measurement>> GetAllByTypeIdAsync(Guid typeId, Guid userId, bool noTracking)
+    {
+        return (await Repository.GetAllAsync(userId, noTracking)).Select(x => Mapper.Map(x)!);
+    }
 }

@@ -122,27 +122,26 @@ public class MeasurementTypeController : ControllerBase
     [Authorize(Roles = "admin")]
     [HttpPost]
     public async Task<ActionResult<App.Public.DTO.v1.MeasurementType>> PostMeasurementType(App.Public.DTO.v1.MeasurementType measurementType)
-    {
+    { 
         var culture = LangStr.SupportedCultureOrDefault(
             Thread.CurrentThread.CurrentUICulture.Name);
         
         measurementType.Id = Guid.NewGuid();
+
+        if (!ModelState.IsValid) return BadRequest();
         
-        if (ModelState.IsValid)
-        {
-            var bllMeasurementType = _mapper.Map(measurementType, culture);
-            _bll.MeasurementTypes.Add(bllMeasurementType!);
-            await _bll.SaveChangesAsync();
-        }
+        var bllMeasurementType = _mapper.Map(measurementType, culture);
+        _bll.MeasurementTypes.Add(bllMeasurementType!);
+        await _bll.SaveChangesAsync();
 
         return CreatedAtAction(
-            "GetMeasurementType", 
-            new
-            {
-                id = measurementType.Id,
-                version = HttpContext.GetRequestedApiVersion()!.ToString()
-            }, 
-            measurementType);
+        "GetMeasurementType", 
+        new
+        {
+            id = measurementType.Id,
+            version = HttpContext.GetRequestedApiVersion()!.ToString()
+        }, 
+        measurementType);
     }
 
     // DELETE: api/MeasurementType/5

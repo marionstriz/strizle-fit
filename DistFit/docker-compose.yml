@@ -1,8 +1,18 @@
 version: '3.8'
 
 services:
+  distfit:
+    container_name: distfit
+    image: distfit:latest
+    restart: on-failure
+    logging:
+      options:
+        max-size: 10m
+        max-file: '3'
+    ports:
+      - '9000:7070'
   distfit-postgres:
-    container_name: postgres
+    container_name: distfit-postgres
     image: postgres:latest
     restart: on-failure
     environment:
@@ -14,7 +24,7 @@ services:
         max-size: 10m
         max-file: '3'
     ports:
-      - '5432:5432'
+      - '5432'
     volumes:
       - distfit-postgres-volume:/var/lib/postgresql/data
 

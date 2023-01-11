@@ -1,6 +1,7 @@
 import { EventAggregator, IDisposable } from 'aurelia';
 import { IMeasurementType } from '../../domain/IMeasurementType';
-import { MeasurementTypeRepository } from '../../repositories/MeasurementTypeRepository';
+import { MeasurementTypeService } from '../../services/MeasurementTypeService';
+import IdentityState from '../../state/IdentityState';
 
 export class MeasurementTypesNav {
 
@@ -9,11 +10,12 @@ export class MeasurementTypesNav {
     measurementTypes: IMeasurementType[] = [];
     activeMeasurementType: IMeasurementType;
 
-    constructor(private eventAggregator: EventAggregator, 
-            private repo: MeasurementTypeRepository) {
+    constructor(private identityState: IdentityState,
+            private eventAggregator: EventAggregator, 
+            private repo: MeasurementTypeService) {
 
-        repo.getAllMeasurementTypesAsync().then((res) => {
-            this.measurementTypes = res;
+        repo.getAllAsync(identityState).then((res) => {
+            this.measurementTypes = res.data;
         });
         this.activeMeasurementType = this.measurementTypes[0];
     }

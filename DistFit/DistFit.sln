@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		docker-compose.yml = docker-compose.yml
 		.dockerignore = .dockerignore
 		README.md = README.md
+		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Base", "Base", "{5F55FBB2-B7AF-4148-83C8-20FDAAE4991A}"

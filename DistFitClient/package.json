@@ -10,6 +10,8 @@
   "dependencies": {
     "@popperjs/core": "^2.11.6",
     "aurelia": "latest",
+    "aurelia-store": "^1.7.2",
+    "axios": "^1.2.2",
     "bootstrap": "^5.2.3",
     "jquery": "^3.6.3"
   },
@@ -43,7 +45,7 @@
     "lint:js": "eslint src test --ext .js,.ts",
     "lint:html": "htmlhint -c .htmlhintrc src",
     "lint": "npm run lint:js && npm run lint:html",
-    "start": "webpack serve",
+    "start": "webpack serve -- --port 80",
     "build": "rimraf dist && webpack --env production",
     "analyze": "rimraf dist && webpack --env production --analyze"
   }

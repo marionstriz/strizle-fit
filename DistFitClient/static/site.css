@@ -14,3 +14,17 @@
   .distfit-home-heading {
     height: 40%;
   }
+
+  .distfit-top-nav-button {
+    border-top-right-radius: 10px!important;
+    border-top-left-radius: 10px!important;
+  }
+
+  .distfit-bottom-nav-button {
+    border-bottom-right-radius: 10px!important;
+    border-bottom-left-radius: 10px!important;
+  }
+
+  .distfit-navbar-last-item {
+    margin-right: 20px;
+  }

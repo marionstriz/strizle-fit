@@ -3,6 +3,8 @@ using App.Public.v1.Mappers;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Base.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Errors = WebApp.Helpers.RestApiErrorHelpers;
 
 namespace WebApp.ApiControllers;
@@ -13,6 +15,7 @@ namespace WebApp.ApiControllers;
 [ApiVersion( "1.0" )]
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiController]
+[Authorize (AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class UserExerciseController : ControllerBase
 {
     private readonly IAppBll _bll;

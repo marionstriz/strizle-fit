@@ -5,7 +5,7 @@ import { route } from 'aurelia';
     {
       id: 'home',
       path: '',
-      component: import('./views/home'),
+      component: import('./views/Home'),
       title: 'Home',
     },
     {
@@ -13,6 +13,12 @@ import { route } from 'aurelia';
       path: '/measurements',
       component: import('./views/measurements'),
       title: 'Measurements',
+    },
+    {
+      id: 'login',
+      path: '/login',
+      component: import('./views/identity/login'),
+      title: 'Login',
     }
   ]
 })

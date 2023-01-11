@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using App.Public.v1.Mappers;
 using AutoMapper;
 using Base.Domain;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers;
@@ -14,6 +15,7 @@ namespace WebApp.ApiControllers;
 [ApiVersion( "2.0" )]
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiController]
+[Authorize (AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class UnitController : ControllerBase
 {
     private readonly ILogger<UnitController> _logger;
