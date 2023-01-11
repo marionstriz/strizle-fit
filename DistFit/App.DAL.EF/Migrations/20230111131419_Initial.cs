@@ -199,6 +199,28 @@ namespace App.DAL.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RefreshToken",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Token = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: false),
+                    ExpirationDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    PreviousToken = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: true),
+                    PreviousTokenExpirationDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    AppUserId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshToken", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RefreshToken_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserExercises",
                 columns: table => new
                 {
@@ -282,6 +304,7 @@ namespace App.DAL.EF.Migrations
                     Value = table.Column<decimal>(type: "numeric(24,3)", precision: 24, scale: 3, nullable: false),
                     ValueUnitId = table.Column<Guid>(type: "uuid", nullable: false),
                     MeasurementTypeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    MeasuredAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     AppUserId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -615,6 +638,11 @@ namespace App.DAL.EF.Migrations
                 column: "ProgramId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RefreshToken_AppUserId",
+                table: "RefreshToken",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SessionExercises_ExerciseTypeId",
                 table: "SessionExercises",
                 column: "ExerciseTypeId");
@@ -691,6 +719,9 @@ namespace App.DAL.EF.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProgramsSaved");
+
+            migrationBuilder.DropTable(
+                name: "RefreshToken");
 
             migrationBuilder.DropTable(
                 name: "SetEntries");

@@ -1,5 +1,6 @@
 using App.Contracts.DAL;
 using App.DAL.EF.Mappers;
+using App.DAL.EF.Mappers.Identity;
 using App.DAL.EF.Repositories;
 using Base.DAL.EF;
 
@@ -65,4 +66,8 @@ public class AppUow : BaseUow<AppDbContext>, IAppUnitOfWork
     private IUserSessionExerciseRepository? _userSessionExercises;
     public IUserSessionExerciseRepository UserSessionExercises => 
         _userSessionExercises ??= new UserSessionExerciseRepository(UowDbContext, new UserSessionExerciseMapper(_mapper));
+    
+    private IAppUserRepository? _appUserRepository;
+    public IAppUserRepository AppUsers => 
+        _appUserRepository ??= new AppUserRepository(UowDbContext, new AppUserMapper(_mapper));
 }

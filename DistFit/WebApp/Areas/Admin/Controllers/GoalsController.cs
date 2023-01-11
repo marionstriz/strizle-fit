@@ -1,61 +1,63 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using App.Contracts.BLL;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using App.DAL.EF;
+using AutoMapper;
 using App.Domain;
+using App.Public.DTO.v1.Identity;
+using App.Public.v1.Mappers;
+using Base.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "admin")]
     public class GoalsController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAppBll _bll;
+        private readonly GoalMapper _mapper;
 
-        public GoalsController(AppDbContext context)
+        public GoalsController(IAppBll bll, IMapper mapper)
         {
-            _context = context;
+            _bll = bll;
+            _mapper = new GoalMapper(mapper);
         }
 
         // GET: Admin/Goals
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Goals.Include(g => g.AppUser).Include(g => g.ExerciseType).Include(g => g.MeasurementType).Include(g => g.ValueUnit);
-            return View(await appDbContext.ToListAsync());
+            var goals = (await _bll.Goals
+                .GetAllAsync(User.GetUserId(), true))
+                .Select(x => _mapper.Map(x));
+            
+            return View(goals);
         }
 
         // GET: Admin/Goals/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
-            if (id == null || _context.Goals == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var goal = await _context.Goals
-                .Include(g => g.AppUser)
-                .Include(g => g.ExerciseType)
-                .Include(g => g.MeasurementType)
-                .Include(g => g.ValueUnit)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var goal = await _bll.Goals.FirstOrDefaultAsync(id.Value);
+            
             if (goal == null)
             {
                 return NotFound();
             }
 
-            return View(goal);
+            return View(_mapper.Map(goal));
         }
 
         // GET: Admin/Goals/Create
-        public IActionResult Create()
+        public async Task<IActionResult> CreateAsync()
         {
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["ExerciseTypeId"] = new SelectList(_context.ExerciseTypes, "Id", "Id");
-            ViewData["MeasurementTypeId"] = new SelectList(_context.MeasurementTypes, "Id", "Id");
-            ViewData["ValueUnitId"] = new SelectList(_context.Units, "Id", "Id");
+            ViewData["ExerciseTypeId"] = new SelectList(await _bll.ExerciseTypes.GetAllAsync(), "Id", "Name");
+            ViewData["MeasurementTypeId"] = new SelectList(await _bll.MeasurementTypes.GetAllAsync(), "Id", "Name");
+            ViewData["ValueUnitId"] = new SelectList(await _bll.Units.GetAllAsync(), "Id", "Name");
             return View();
         }
 
@@ -64,40 +66,42 @@ namespace WebApp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Value,ValueUnitId,ReachedAt,AppUserId,MeasurementTypeId,ExerciseTypeId,CreatedBy,CreatedAt,UpdatedBy,UpdatedAt,Comment,Id")] Goal goal)
+        public async Task<IActionResult> CreateAsync(App.Public.DTO.v1.Goal goal)
         {
             if (ModelState.IsValid)
             {
                 goal.Id = Guid.NewGuid();
-                _context.Add(goal);
-                await _context.SaveChangesAsync();
+                goal.AppUserId = User.GetUserId();
+                
+                _bll.Goals.Add(_mapper.Map(goal)!);
+                
+                await _bll.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", goal.AppUserId);
-            ViewData["ExerciseTypeId"] = new SelectList(_context.ExerciseTypes, "Id", "Id", goal.ExerciseTypeId);
-            ViewData["MeasurementTypeId"] = new SelectList(_context.MeasurementTypes, "Id", "Id", goal.MeasurementTypeId);
-            ViewData["ValueUnitId"] = new SelectList(_context.Units, "Id", "Id", goal.ValueUnitId);
+            ViewData["ExerciseTypeId"] = new SelectList(await _bll.ExerciseTypes.GetAllAsync(), "Id", "Name");
+            ViewData["MeasurementTypeId"] = new SelectList(await _bll.MeasurementTypes.GetAllAsync(), "Id", "Name");
+            ViewData["ValueUnitId"] = new SelectList(await _bll.Units.GetAllAsync(), "Id", "Name");
             return View(goal);
         }
 
         // GET: Admin/Goals/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
-            if (id == null || _context.Goals == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var goal = await _context.Goals.FindAsync(id);
+            var goal = await _bll.Goals.FirstOrDefaultAsync(id.Value);
             if (goal == null)
             {
                 return NotFound();
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", goal.AppUserId);
-            ViewData["ExerciseTypeId"] = new SelectList(_context.ExerciseTypes, "Id", "Id", goal.ExerciseTypeId);
-            ViewData["MeasurementTypeId"] = new SelectList(_context.MeasurementTypes, "Id", "Id", goal.MeasurementTypeId);
-            ViewData["ValueUnitId"] = new SelectList(_context.Units, "Id", "Id", goal.ValueUnitId);
-            return View(goal);
+            ViewData["ExerciseTypeId"] = new SelectList(await _bll.ExerciseTypes.GetAllAsync(), "Id", "Name");
+            ViewData["MeasurementTypeId"] = new SelectList(await _bll.MeasurementTypes.GetAllAsync(), "Id", "Name");
+            ViewData["ValueUnitId"] = new SelectList(await _bll.Units.GetAllAsync(), "Id", "Name");
+            
+            return View(_mapper.Map(goal));
         }
 
         // POST: Admin/Goals/Edit/5
@@ -105,7 +109,7 @@ namespace WebApp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Value,ValueUnitId,ReachedAt,AppUserId,MeasurementTypeId,ExerciseTypeId,CreatedBy,CreatedAt,UpdatedBy,UpdatedAt,Comment,Id")] Goal goal)
+        public async Task<IActionResult> Edit(Guid id, App.Public.DTO.v1.Goal goal)
         {
             if (id != goal.Id)
             {
@@ -116,49 +120,42 @@ namespace WebApp.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(goal);
-                    await _context.SaveChangesAsync();
+                    goal.AppUserId = User.GetUserId();
+                    _bll.Goals.Update(_mapper.Map(goal)!);
+                    await _bll.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!GoalExists(goal.Id))
+                    if (!await GoalExistsAsync(goal.Id))
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", goal.AppUserId);
-            ViewData["ExerciseTypeId"] = new SelectList(_context.ExerciseTypes, "Id", "Id", goal.ExerciseTypeId);
-            ViewData["MeasurementTypeId"] = new SelectList(_context.MeasurementTypes, "Id", "Id", goal.MeasurementTypeId);
-            ViewData["ValueUnitId"] = new SelectList(_context.Units, "Id", "Id", goal.ValueUnitId);
+            ViewData["ExerciseTypeId"] = new SelectList(await _bll.ExerciseTypes.GetAllAsync(), "Id", "Name");
+            ViewData["MeasurementTypeId"] = new SelectList(await _bll.MeasurementTypes.GetAllAsync(), "Id", "Name");
+            ViewData["ValueUnitId"] = new SelectList(await _bll.Units.GetAllAsync(), "Id", "Name");
+            
             return View(goal);
         }
 
         // GET: Admin/Goals/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
-            if (id == null || _context.Goals == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var goal = await _context.Goals
-                .Include(g => g.AppUser)
-                .Include(g => g.ExerciseType)
-                .Include(g => g.MeasurementType)
-                .Include(g => g.ValueUnit)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var goal = await _bll.Goals.FirstOrDefaultAsync(id.Value);
             if (goal == null)
             {
                 return NotFound();
             }
 
-            return View(goal);
+            return View(_mapper.Map(goal));
         }
 
         // POST: Admin/Goals/Delete/5
@@ -166,23 +163,19 @@ namespace WebApp.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            if (_context.Goals == null)
-            {
-                return Problem("Entity set 'AppDbContext.Goals'  is null.");
-            }
-            var goal = await _context.Goals.FindAsync(id);
+            var goal = await _bll.Goals.FirstOrDefaultAsync(id);
             if (goal != null)
             {
-                _context.Goals.Remove(goal);
+                _bll.Goals.Remove(goal);
             }
             
-            await _context.SaveChangesAsync();
+            await _bll.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool GoalExists(Guid id)
+        private async Task<bool> GoalExistsAsync(Guid id)
         {
-          return (_context.Goals?.Any(e => e.Id == id)).GetValueOrDefault();
+          return await _bll!.Goals.FirstOrDefaultAsync(id) != null;
         }
     }
 }

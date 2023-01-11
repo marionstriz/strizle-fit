@@ -1,4 +1,5 @@
 using App.Contracts.DAL;
+using App.DAL.DTO;
 using Base.Contracts.Base;
 using Base.DAL.EF;
 using Microsoft.EntityFrameworkCore;
@@ -34,5 +35,24 @@ public class GoalRepository : BaseEntityRepository<DAL.DTO.Goal, Domain.Goal, Ap
             .Where(m => m.AppUserId == userId);
         
         return (await query.ToListAsync()).Select(x => Mapper.Map(x)!);
+    }
+
+    public override Goal Update(Goal entity)
+    {
+        var domainGoal = Mapper.Map(entity)!;
+        domainGoal.UpdatedAt = DateTime.UtcNow;
+        domainGoal.UpdatedBy = domainGoal.AppUser?.UserName;
+        
+        return Mapper.Map(RepoDbSet.Update(domainGoal).Entity)!;
+    }
+
+    public override Goal Add(Goal entity)
+    {
+        var domainGoal = Mapper.Map(entity)!;
+
+        domainGoal.CreatedBy = domainGoal.AppUser?.UserName;
+        domainGoal.UpdatedBy = domainGoal.AppUser?.UserName;
+        
+        return Mapper.Map(RepoDbSet.Add(domainGoal).Entity)!;
     }
 }

@@ -14,10 +14,8 @@ public class Measurement : DomainEntityId
     public Guid MeasurementTypeId { get; set; }
     public App.BLL.DTO.MeasurementType? MeasurementType { get; set; }
     
+    public DateTime MeasuredAt { get; set; }
+    
     public Guid AppUserId { get; set; }
-    
     public App.BLL.DTO.Identity.AppUser? AppUser { get; set; }
-    
-    [MaxLength(1024)]
-    public string? FilePath { get; set; }
 }

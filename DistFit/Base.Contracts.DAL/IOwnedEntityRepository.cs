@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Base.Contracts.Domain;
 
 namespace Base.Contracts.DAL;

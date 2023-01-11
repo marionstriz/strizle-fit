@@ -71,6 +71,17 @@ builder.Services.AddVersionedApiExplorer( options => options.GroupNameFormat = "
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyPolicy",
+        policy  =>
+        {
+            policy.AllowAnyOrigin();
+            policy.AllowAnyMethod();
+            policy.AllowAnyHeader();
+        });
+});
+
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
@@ -88,6 +99,8 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseCors("MyPolicy");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

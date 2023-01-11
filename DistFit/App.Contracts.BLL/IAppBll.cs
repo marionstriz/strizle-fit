@@ -18,4 +18,5 @@ public interface IAppBll : IBll
     IUnitService Units { get; }
     IUserExerciseService UserExercises { get; }
     IUserSessionExerciseService UserSessionExercises { get; }
+    IAppUserService AppUsers { get; }
 }

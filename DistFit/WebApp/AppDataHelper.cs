@@ -74,12 +74,12 @@ public static class AppDataHelper
                 }
             }
 
-            var users = new (string username, string password, string roles)[]
+            var users = new (string username, string firstname, string lastname, string password, string roles)[]
             {
-                ("admin@itcollege.ee", "Kala.maja1", "user,admin"),
-                ("mastri@itcollege.ee", "Kala.maja1", "user,admin"),
-                ("user@itcollege.ee", "Kala.maja1", "user"),
-                ("newuser@itcollege.ee", "Kala.maja1", "")
+                ("admin@itcollege.ee", "Big", "Admin", "Kala.maja1", "user,admin"),
+                ("mastri@itcollege.ee", "Marion", "Striz", "Kala.maja1", "user,admin"),
+                ("user@itcollege.ee", "Regular", "User", "Kala.maja1", "user"),
+                ("newuser@itcollege.ee", "No", "Rights", "Kala.maja1", "")
             };
 
             foreach (var userInfo in users)
@@ -90,6 +90,8 @@ public static class AppDataHelper
                     user = new AppUser
                     {
                         Email = userInfo.username,
+                        FirstName = userInfo.firstname,
+                        LastName = userInfo.lastname,
                         UserName = userInfo.username,
                         EmailConfirmed = true,
                     };
@@ -139,6 +141,22 @@ public static class AppDataHelper
                 weightLangStr.SetTranslation("Kaal", "et-EE");
                 var weight = new MeasurementType{Name = weightLangStr};
                 context.MeasurementTypes.Add(weight);
+                
+                var heightLangStr = new LangStr("Height", LangStr.DefaultCulture);
+                heightLangStr.SetTranslation("Pikkus", "et-EE");
+                var height = new MeasurementType{Name = heightLangStr};
+                context.MeasurementTypes.Add(height);
+                
+                var waistCircum = new LangStr("Waist circumference", LangStr.DefaultCulture);
+                waistCircum.SetTranslation("Pihaümbermõõt", "et-EE");
+                var waistCirc = new MeasurementType{Name = waistCircum};
+                context.MeasurementTypes.Add(waistCirc);
+                
+                var hipsCircum = new LangStr("Hip circumference", LangStr.DefaultCulture);
+                hipsCircum.SetTranslation("Puusaümbermõõt", "et-EE");
+                var hipsCirc = new MeasurementType{Name = hipsCircum};
+                context.MeasurementTypes.Add(hipsCirc);
+                
                 context.SaveChanges();
                 changesMade = true;
             }

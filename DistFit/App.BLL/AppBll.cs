@@ -1,5 +1,6 @@
 using App.BLL.Services;
 using App.BLL.Mappers;
+using App.BLL.Mappers.Identity;
 using App.Contracts.BLL;
 using App.Contracts.BLL.Services;
 using App.Contracts.DAL;
@@ -79,4 +80,8 @@ public class AppBll : BaseBll<IAppUnitOfWork>, IAppBll
     private IUserSessionExerciseService? _userSessionExercises;
     public IUserSessionExerciseService UserSessionExercises => 
         _userSessionExercises ??= new UserSessionExerciseService(UnitOfWork.UserSessionExercises, new UserSessionExerciseMapper(Mapper));
+    
+    private IAppUserService? _appUsers;
+    public IAppUserService AppUsers => 
+        _appUsers ??= new AppUserService(UnitOfWork.AppUsers, new AppUserMapper(Mapper));
 }

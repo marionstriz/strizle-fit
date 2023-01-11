@@ -17,4 +17,5 @@ public interface IAppUnitOfWork : IUnitOfWork
     IUnitRepository Units { get; }
     IUserExerciseRepository UserExercises { get; }
     IUserSessionExerciseRepository UserSessionExercises { get; }
+    IAppUserRepository AppUsers { get; }
 }

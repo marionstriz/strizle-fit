@@ -116,4 +116,7 @@
     <data name="SessionExerciseId" xml:space="preserve">
         <value>Sessiooni harjutuse ID</value>
     </data>
+    <data name="MeasuredAt" xml:space="preserve">
+        <value>Mõõdetud</value>
+    </data>
 </root>

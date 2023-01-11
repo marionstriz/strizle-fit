@@ -18,4 +18,6 @@ public class AppUser : BaseUser
     public ICollection<Goal>? Goals { get; set; }
     public ICollection<Measurement>? Measurements { get; set; }
     public ICollection<ProgramSaved>? ProgramSaves { get; set; }
+    
+    public ICollection<RefreshToken>? RefreshTokens { get; set; }
 }

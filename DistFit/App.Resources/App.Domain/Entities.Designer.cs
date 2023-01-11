@@ -254,5 +254,11 @@ namespace App.Resources.App.Domain {
                 return ResourceManager.GetString("SessionExerciseId", resourceCulture);
             }
         }
+        
+        public static string MeasuredAt {
+            get {
+                return ResourceManager.GetString("MeasuredAt", resourceCulture);
+            }
+        }
     }
 }

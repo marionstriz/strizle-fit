@@ -123,4 +123,7 @@
     <data name="SessionExerciseId" xml:space="preserve">
         <value>Session exercise ID</value>
     </data>
+    <data name="MeasuredAt" xml:space="preserve">
+        <value>Measured at</value>
+    </data>
 </root>

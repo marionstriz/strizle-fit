@@ -116,7 +116,7 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
     {
         var dateProperties = context.Model.GetEntityTypes()
             .SelectMany(t => t.GetProperties())
-            .Where(p => p.ClrType == typeof(DateTime))
+            .Where(p => p.ClrType == typeof(DateTime) || p.ClrType == typeof(DateTime?))
             .Select(z => new
             {
                 ParentName = z.DeclaringEntityType.Name,
@@ -124,7 +124,7 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
             });
 
         var editedEntitiesInTheDbContextGraph = context.ChangeTracker.Entries()
-            .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified)
+            .Where(e => e.State is EntityState.Added or EntityState.Modified)
             .Select(x => x.Entity);
         
 
@@ -146,6 +146,6 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
                 originalValue = originalValue.Value.ToUniversalTime();
                 prop.SetValue(entity, DateTime.SpecifyKind(originalValue.Value, DateTimeKind.Utc));
             }
-        }
+        } 
     }
 }

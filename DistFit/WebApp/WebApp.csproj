@@ -33,4 +33,17 @@
       <ProjectReference Include="..\App.Public\App.Public.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\ExerciseTypes\Create.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\ExerciseTypes\Delete.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\ExerciseTypes\Details.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\ExerciseTypes\Edit.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\ExerciseTypes\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\Units\Create.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\Units\Delete.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\Units\Details.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\Units\Edit.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\Units\Index.cshtml" />
+    </ItemGroup>
+
 </Project>

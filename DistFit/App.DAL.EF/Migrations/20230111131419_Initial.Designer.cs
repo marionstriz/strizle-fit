@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace App.DAL.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230109134124_Initial")]
+    [Migration("20230111131419_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -200,6 +200,37 @@ namespace App.DAL.EF.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("App.Domain.Identity.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AppUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("ExpirationDateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("PreviousToken")
+                        .HasMaxLength(36)
+                        .HasColumnType("character varying(36)");
+
+                    b.Property<DateTime?>("PreviousTokenExpirationDateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("character varying(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.ToTable("RefreshToken");
+                });
+
             modelBuilder.Entity("App.Domain.Measurement", b =>
                 {
                     b.Property<Guid>("Id")
@@ -219,6 +250,9 @@ namespace App.DAL.EF.Migrations
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(32)
                         .HasColumnType("character varying(32)");
+
+                    b.Property<DateTime>("MeasuredAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("MeasurementTypeId")
                         .HasColumnType("uuid");
@@ -766,6 +800,17 @@ namespace App.DAL.EF.Migrations
                     b.Navigation("ValueUnit");
                 });
 
+            modelBuilder.Entity("App.Domain.Identity.RefreshToken", b =>
+                {
+                    b.HasOne("App.Domain.Identity.AppUser", "AppUser")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+                });
+
             modelBuilder.Entity("App.Domain.Measurement", b =>
                 {
                     b.HasOne("App.Domain.Identity.AppUser", "AppUser")
@@ -995,6 +1040,8 @@ namespace App.DAL.EF.Migrations
                     b.Navigation("Measurements");
 
                     b.Navigation("ProgramSaves");
+
+                    b.Navigation("RefreshTokens");
                 });
 
             modelBuilder.Entity("App.Domain.MeasurementType", b =>

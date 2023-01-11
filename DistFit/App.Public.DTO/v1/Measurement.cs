@@ -19,6 +19,9 @@ public class Measurement : DomainEntityId
     public Guid MeasurementTypeId { get; set; }
     [Display(ResourceType = typeof(App.Resources.App.Domain.Entities), Name = nameof(MeasurementType))]
     public MeasurementType? MeasurementType { get; set; }
+
+    [Display(ResourceType = typeof(App.Resources.App.Domain.Entities), Name = nameof(MeasuredAt))]
+    public DateTime MeasuredAt { get; set; } = DateTime.UtcNow;
     
     [Display(ResourceType = typeof(Base.Resources.Common), Name = nameof(AppUserId))]
     public Guid AppUserId { get; set; }
