@@ -79,9 +79,9 @@ public class MeasurementController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet("type/{id}")]
-    public async Task<ActionResult<IEnumerable<App.Public.DTO.v1.Measurement>>> GetMeasurementByType(Guid id)
+    public async Task<ActionResult<IEnumerable<App.Public.DTO.v1.Measurement>>> GetMeasurementsByType(Guid id)
     {
-        return Ok((await _bll.Measurements.GetAllByTypeIdAsync(User.GetUserId(), id, true))
+        return Ok((await _bll.Measurements.GetAllByTypeIdAsync(id, User.GetUserId()))
             .Select(x => _mapper.Map(x)));
     }
 

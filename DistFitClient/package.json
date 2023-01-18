@@ -13,7 +13,10 @@
     "aurelia-store": "^1.7.2",
     "axios": "^1.2.2",
     "bootstrap": "^5.2.3",
-    "jquery": "^3.6.3"
+    "chart.js": "^4.1.2",
+    "jquery": "^3.6.3",
+    "jquery-datetimepicker": "^2.5.21",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@aurelia/testing": "latest",
@@ -45,7 +48,7 @@
     "lint:js": "eslint src test --ext .js,.ts",
     "lint:html": "htmlhint -c .htmlhintrc src",
     "lint": "npm run lint:js && npm run lint:html",
-    "start": "webpack serve -- --port 80",
+    "start": "webpack serve",
     "build": "rimraf dist && webpack --env production",
     "analyze": "rimraf dist && webpack --env production --analyze"
   }

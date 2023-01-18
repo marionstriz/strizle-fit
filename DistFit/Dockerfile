@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:latest AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0-bullseye-slim-amd64 AS build
 WORKDIR /app
 
 COPY *.props .
@@ -61,7 +61,7 @@ COPY WebApp/. ./WebApp/
 WORKDIR /app/WebApp
 RUN dotnet publish -c Release -o out
 
-FROM mcr.microsoft.com/dotnet/aspnet:latest AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:7.0-bullseye-slim-amd64 AS runtime
 WORKDIR /app
 ENV ConnectionStrings:NpgsqlConnection="Host=distfit-postgres;Port=5432;Username=postgres;Password=postgres;database=DistFit"
 COPY --from=build /app/WebApp/out ./

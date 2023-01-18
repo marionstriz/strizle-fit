@@ -17,14 +17,28 @@ public class PerformanceRepository
     public override async Task<DAL.DTO.Performance?> FirstOrDefaultAsync(Guid id, bool noTracking = true)
     {
         return Mapper.Map(await CreateQuery(noTracking)
-            .Include(u => u.Exercise)
+            .Include(u => u.UserExercise)
+            .ThenInclude(e => e!.ExerciseType)
             .FirstOrDefaultAsync(a => a.Id.Equals(id)));
     }
 
-    public override async Task<IEnumerable<DAL.DTO.Performance>> GetAllAsync(bool noTracking = true)
+    public async Task<IEnumerable<DAL.DTO.Performance>> GetAllAsync(Guid userId, bool noTracking = true)
     {
         var query = CreateQuery(noTracking)
-            .Include(u => u.Exercise);
+            .Include(u => u.UserExercise)
+            .ThenInclude(e => e!.ExerciseType)
+            .Where(u => u.UserExercise!.AppUserId == userId);
+        
+        return (await query.ToListAsync()).Select(x => Mapper.Map(x)!);
+    }
+    
+    public async Task<IEnumerable<Performance>> GetAllByTypeIdAsync(Guid typeId, Guid userId, bool noTracking = true)
+    {
+        var query = CreateQuery(noTracking)
+            .Include(u => u.UserExercise)
+            .ThenInclude(e => e!.ExerciseType)
+            .Where(u => u.UserExercise!.AppUserId == userId 
+                        && u.UserExercise.ExerciseTypeId == typeId);
         
         return (await query.ToListAsync()).Select(x => Mapper.Map(x)!);
     }

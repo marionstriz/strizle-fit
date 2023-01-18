@@ -1,0 +1,11 @@
+<div class="list-group">
+  <div repeat.for="type of exerciseTypes">
+    <a href="#" class="list-group-item list-group-item-action list-group-item-light
+    ${type.id === activeExerciseType.id ? 'active' : ''} 
+    ${$index === 0 ? 'distfit-top-nav-button' : ''}
+    ${$index === types.length - 1 ? 'distfit-bottom-nav-button' : ''}"
+    click.trigger="makeActive($index)">
+      ${type.name}
+    </a>
+  </div>
+</div>

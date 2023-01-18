@@ -1,18 +1,26 @@
+import { IdentityService } from './../services/IdentityService';
 import { IRouter } from "aurelia";
-import IdentityState from "../state/IdentityState";
 
 export class Home {
 
-    constructor(private identityState: IdentityState,
+    constructor(private identityService: IdentityService,
         @IRouter private router: IRouter) {
     }
 
+    async loadExercisesAsync() {
+        await this.router.load('/exercises/add');
+    }
+
     async loadMeasurementsAsync() {
-        await this.router.load('/measurements');
+        await this.router.load('/measurements/add');
     }
 
     async loadLoginAsync() {
         await this.router.load('/login');
+    }
+
+    async loadRegisterAsync() {
+        await this.router.load('/register');
     }
 
     unimplemented() {

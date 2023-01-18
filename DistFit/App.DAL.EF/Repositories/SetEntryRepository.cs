@@ -20,6 +20,7 @@ public class SetEntryRepository
             .Include(u => u.QuantityUnit)
             .Include(u => u.WeightUnit)
             .Include(u => u.Performance)
+            .ThenInclude(p => p!.UserExercise)
             .FirstOrDefaultAsync(a => a.Id.Equals(id)));
     }
 
@@ -28,7 +29,35 @@ public class SetEntryRepository
         var query = CreateQuery(noTracking)
             .Include(u => u.QuantityUnit)
             .Include(u => u.WeightUnit)
-            .Include(u => u.Performance);
+            .Include(u => u.Performance)
+            .OrderBy(u => u.CreatedAt);
+
+        return (await query.ToListAsync()).Select(x => Mapper.Map(x)!);
+    }
+
+    public async Task<IEnumerable<SetEntry>> GetAllAsync(Guid userId, bool noTracking)
+    {
+        var query = CreateQuery(noTracking)
+            .Include(u => u.QuantityUnit)
+            .Include(u => u.WeightUnit)
+            .Include(u => u.Performance)
+            .ThenInclude(p => p!.UserExercise)
+            .Where(u => u.Performance!.UserExercise!.AppUserId == userId)
+            .OrderBy(u => u.CreatedAt);
+
+        return (await query.ToListAsync()).Select(x => Mapper.Map(x)!);
+    }
+
+    public async Task<IEnumerable<SetEntry>> GetAllByPerformanceIdAsync(Guid perfId, Guid userId, bool noTracking)
+    {
+        var query = CreateQuery(noTracking)
+            .Include(u => u.QuantityUnit)
+            .Include(u => u.WeightUnit)
+            .Include(u => u.Performance)
+            .ThenInclude(p => p!.UserExercise)
+            .Where(u => u.Performance!.UserExercise!.AppUserId == userId)
+            .Where(u => u.PerformanceId == perfId)
+            .OrderBy(u => u.CreatedAt);
 
         return (await query.ToListAsync()).Select(x => Mapper.Map(x)!);
     }

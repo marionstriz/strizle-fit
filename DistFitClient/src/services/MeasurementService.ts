@@ -1,6 +1,7 @@
 import { BaseService } from './BaseService';
 import { IMeasurement } from './../domain/IMeasurement';
-import httpClient from "../http-client";
+import { IdentityService } from './IdentityService';
+import IServiceResult from '../domain/IServiceResult';
 
 export class MeasurementService extends BaseService<IMeasurement> {
 
@@ -8,11 +9,9 @@ export class MeasurementService extends BaseService<IMeasurement> {
         super('/measurement');
     }
 
-    async getByMeasurementTypeId(id: string, token: string): Promise<IMeasurement[]> {
-        let res = await httpClient.get(`${this.path}/type/${id}`, {
-            headers: {
-                "Authorization": "bearer " + token
-        }});
-        return res.data;
+    async getByMeasurementTypeIdAsync(id: string, identityService: IdentityService)
+            : Promise<IServiceResult<IMeasurement[]>> {
+
+        return await this.getRequestToPathAsync(`${this.path}/type/${id}`, identityService) as IServiceResult<IMeasurement[]>;
     }
 }

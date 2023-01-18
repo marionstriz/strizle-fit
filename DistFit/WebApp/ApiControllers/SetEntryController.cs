@@ -2,6 +2,7 @@ using App.Contracts.BLL;
 using Microsoft.AspNetCore.Mvc;
 using App.Public.v1.Mappers;
 using AutoMapper;
+using Base.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 
@@ -32,7 +33,7 @@ public class SetEntryController : ControllerBase
 
     // GET: api/SetEntry
     /// <summary>
-    /// Get all set entries available in application, requires authorisation
+    /// Get all set entries belonging to user, requires authorisation
     /// </summary>
     /// <returns>Enumerable of set entries</returns>
     [Produces( "application/json" )]
@@ -40,14 +41,14 @@ public class SetEntryController : ControllerBase
     [ProducesResponseType( typeof( IEnumerable<App.Public.DTO.v1.SetEntry> ), StatusCodes.Status200OK )]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<App.Public.DTO.v1.SetEntry>>> GetSetEntry()
+    public async Task<ActionResult<IEnumerable<App.Public.DTO.v1.SetEntry>>> GetSetEntries()
     {
-        return Ok((await _bll.SetEntries.GetAllAsync()).Select(x => _mapper.Map(x)));
+        return Ok((await _bll.SetEntries.GetAllAsync(User.GetUserId(), true)).Select(x => _mapper.Map(x)));
     }
 
     // GET: api/SetEntry/5
     /// <summary>
-    /// Get set entry by id, requires authorisation
+    /// Get set entry by id, requires authorisation from owning user
     /// </summary>
     /// <param name="id">Set entry GUID</param>
     /// <returns>Set entry if found, null if not found</returns>
@@ -61,12 +62,30 @@ public class SetEntryController : ControllerBase
     {
         var setEntry = await _bll.SetEntries.FirstOrDefaultAsync(id);
 
-        if (setEntry == null)
+        if (setEntry == null || setEntry.Performance!.UserExercise!.AppUserId != User.GetUserId())
         {
             return NotFound();
         }
 
         return _mapper.Map(setEntry)!;
+    }
+    
+    // GET: api/SetEntry/performance/5
+    /// <summary>
+    /// Get set entries by performance id, requires authorisation from owning user
+    /// </summary>
+    /// <param name="id">Performance GUID</param>
+    /// <returns>Enumerable of set entries</returns>
+    [Produces("application/json")]
+    [Consumes("application/json")]
+    [ProducesResponseType(typeof(App.Public.DTO.v1.Measurement), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpGet("performance/{id}")]
+    public async Task<ActionResult<IEnumerable<App.Public.DTO.v1.Measurement>>> GetSetEntriesByPerformance(Guid id)
+    {
+        return Ok((await _bll.SetEntries.GetAllByPerformanceIdAsync(id, User.GetUserId()))
+            .Select(x => _mapper.Map(x)));
     }
 
     // PUT: api/SetEntry/5
@@ -86,7 +105,7 @@ public class SetEntryController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> PutSetEntry(Guid id, App.Public.DTO.v1.SetEntry setEntry)
     {
-        if (id != setEntry.Id)
+        if (id != setEntry.Id || setEntry.Performance!.UserExercise!.AppUserId != User.GetUserId())
         {
             return BadRequest();
         }
@@ -140,7 +159,7 @@ public class SetEntryController : ControllerBase
     public async Task<IActionResult> DeleteSetEntry(Guid id)
     {
         var setEntry = await _bll.SetEntries.FirstOrDefaultAsync(id);
-        if (setEntry == null)
+        if (setEntry == null || setEntry.Performance!.UserExercise!.AppUserId != User.GetUserId())
         {
             return NotFound();
         }

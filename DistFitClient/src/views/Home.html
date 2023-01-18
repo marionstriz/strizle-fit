@@ -1,17 +1,17 @@
 <div class="d-flex justify-content-center align-items-center h-100">
     <div class="d-flex flex-column h-100">
         <div class="d-flex align-items-end pb-3 distfit-home-heading">
-            <h1 if.bind="identityState.user !== null" class="display-3 text-center">Hello, ${identityState.user.firstName}!</h1>
+            <h1 if.bind="identityService.identityState.user" class="display-3 text-center">Hello, ${identityService.identityState.user.firstName}!</h1>
             <h1 else class="display-3 text-center">Welcome, visitor!</h1>
         </div>
-        <div if.bind="identityState.user !== null" class="d-flex flex-column w-100">
-            <a click.trigger="unimplemented()" class="btn btn-lg btn-light my-3">Exercises</a>
-            <a click.trigger="loadMeasurementsAsync()" class="btn btn-lg btn-light my-3">Measurements</a>
-            <a click.trigger="unimplemented()" class="btn btn-lg btn-light my-3">Programs</a>
+        <div if.bind="identityService.identityState.user" class="d-flex flex-column w-100">
+            <a click.trigger="loadExercisesAsync()" class="btn btn-lg btn-light my-3">Add Exercise</a>
+            <a click.trigger="loadMeasurementsAsync()" class="btn btn-lg btn-light my-3">Add Measurement</a>
+            <a click.trigger="unimplemented()" class="btn btn-lg btn-light my-3">My Programs</a>
         </div>
         <div else class="d-flex flex-column w-100">
             <a click.trigger="loadLoginAsync()" class="btn btn-lg btn-light my-3">Sign in</a>
-            <a click.trigger="unimplemented()" class="btn btn-lg btn-light my-3">Register</a>
+            <a click.trigger="loadRegisterAsync()" class="btn btn-lg btn-light my-3">Register</a>
         </div>
     </div>
 </div>

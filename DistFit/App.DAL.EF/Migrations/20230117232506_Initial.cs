@@ -367,7 +367,7 @@ namespace App.DAL.EF.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     PerformedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ExerciseId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserExerciseId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedBy = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
@@ -378,8 +378,8 @@ namespace App.DAL.EF.Migrations
                 {
                     table.PrimaryKey("PK_Performances", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Performances_UserExercises_ExerciseId",
-                        column: x => x.ExerciseId,
+                        name: "FK_Performances_UserExercises_UserExerciseId",
+                        column: x => x.UserExerciseId,
                         principalTable: "UserExercises",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -617,9 +617,9 @@ namespace App.DAL.EF.Migrations
                 column: "ValueUnitId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Performances_ExerciseId",
+                name: "IX_Performances_UserExerciseId",
                 table: "Performances",
-                column: "ExerciseId");
+                column: "UserExerciseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Programs_DurationUnitId",

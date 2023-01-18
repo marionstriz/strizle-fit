@@ -33,14 +33,13 @@ public class ExerciseTypeController : ControllerBase
 
     // GET: api/ExerciseType
     /// <summary>
-    /// Get all exercise types available in application
+    /// Get all exercise types available in application, requires authorisation
     /// </summary>
     /// <returns>Enumerable of exercise types</returns>
     [Produces( "application/json" )]
     [Consumes( "application/json" )]
     [ProducesResponseType( typeof( IEnumerable<App.Public.DTO.v1.ExerciseType> ), StatusCodes.Status200OK )]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<App.Public.DTO.v1.ExerciseType>>> GetExerciseTypes()
     {
@@ -49,7 +48,7 @@ public class ExerciseTypeController : ControllerBase
 
     // GET: api/ExerciseType/5
     /// <summary>
-    /// Get exercise type by id
+    /// Get exercise type by id, requires authorisation
     /// </summary>
     /// <param name="id">Exercise type GUID</param>
     /// <returns>Exercise type if found, null if not found</returns>
@@ -58,7 +57,6 @@ public class ExerciseTypeController : ControllerBase
     [ProducesResponseType(typeof(App.Public.DTO.v1.ExerciseType), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<ActionResult<App.Public.DTO.v1.ExerciseType>> GetExerciseType(Guid id)
     {
@@ -75,7 +73,7 @@ public class ExerciseTypeController : ControllerBase
     // PUT: api/ExerciseType/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     /// <summary>
-    /// Edit exercise type name, requires authorisation
+    /// Edit exercise type name, requires admin roles
     /// </summary>
     /// <param name="id">Exercise type id to edit, must match request exercise type id</param>
     /// <param name="exerciseType">Edited exercise type, id must match request id</param>
@@ -86,6 +84,7 @@ public class ExerciseTypeController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [Authorize (AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> PutExerciseType(Guid id, App.Public.DTO.v1.ExerciseType exerciseType)
     {
@@ -111,7 +110,7 @@ public class ExerciseTypeController : ControllerBase
     // POST: api/ExerciseType
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     /// <summary>
-    /// Add exercise type, requires authorisation
+    /// Add exercise type, requires admin roles
     /// </summary>
     /// <param name="exerciseType">Exercise type to add</param>
     /// <returns>Added exercise type</returns>
@@ -120,6 +119,7 @@ public class ExerciseTypeController : ControllerBase
     [ProducesResponseType(typeof(App.Public.DTO.v1.ExerciseType), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [Authorize (AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
     [HttpPost]
     public async Task<ActionResult<App.Public.DTO.v1.ExerciseType>> PostExerciseType(App.Public.DTO.v1.ExerciseType exerciseType)
     {
@@ -147,7 +147,7 @@ public class ExerciseTypeController : ControllerBase
 
     // DELETE: api/ExerciseType/5
     /// <summary>
-    /// Delete exercise type with given GUID, requires authorisation
+    /// Delete exercise type with given GUID, requires admin roles
     /// </summary>
     /// <param name="id">Id of exercise type to delete</param>
     /// <returns>No content if succeeded, otherwise valid error code</returns>
@@ -156,6 +156,7 @@ public class ExerciseTypeController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Authorize (AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteExerciseType(Guid id)
     {

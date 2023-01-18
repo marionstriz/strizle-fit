@@ -1,17 +1,14 @@
 import { IRouter } from "aurelia";
-import IdentityState from "../state/IdentityState";
+import { IdentityService } from "../services/IdentityService";
 
 export class PageHeader {
 
-    constructor(private identityState: IdentityState,
+    constructor(private identityService: IdentityService,
         @IRouter private router: IRouter) {
     }
 
     async logoutAsync() {
-        this.identityState.user = null;
-        this.identityState.user = null;
-        this.identityState.user = null;
-
+        this.identityService.logout();
         await this.router.load('/home');
     }
 }

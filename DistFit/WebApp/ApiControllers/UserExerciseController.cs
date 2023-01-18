@@ -119,7 +119,6 @@ public class UserExerciseController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<App.Public.DTO.v1.UserExercise>> PostUserExercise(App.Public.DTO.v1.UserExercise userExercise)
     {
-        userExercise.Id = Guid.NewGuid();
         userExercise.AppUserId = User.GetUserId();
         
         if (ModelState.IsValid)

@@ -4,8 +4,8 @@ import { IUnit } from './IUnit';
 export interface IMeasurement {
     value: number;
     valueUnitId: string;
-    valueUnit: IUnit;
+    valueUnit?: IUnit;
     measurementTypeId: string;
-    measurementType: IMeasurementType;
+    measurementType?: IMeasurementType;
     measuredAt: Date;
 }

@@ -1,0 +1,52 @@
+<import from="../../components/exercise-types/ExerciseTypesNav"></import>
+
+<div if.bind="!identityService.identityState.user" class="row d-flex h-100 align-items-center">
+    <div class="col md-6">
+        <h1 class="text-center">Please sign in!</h1>
+    </div>
+</div>
+<div else class="row d-flex h-100 justify-content-center text-center align-items-center">
+    <div class="card">
+        <nav class="navbar">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#typesNav" aria-expanded="false" aria-controls="typesNav" aria-label="Toggle navigation">
+                Types
+            </button>
+            <button class="btn btn-info" click.trigger="toRecentExercisesAsync()">
+                Recent Exercises
+            </button>
+            <button class="btn btn-info" click.trigger="toAddExerciseAsync()">
+                Add
+            </button>
+        </nav>
+        <exercise-types-nav class="collapse" id="typesNav"></exercise-types-nav>
+        <div class="card-body pt-3">
+                
+            <h4 if.bind="exerciseType && maxSetEntries" class="card-title text-center">${exerciseType.name}</h4>
+            <div if.bind="!exerciseType">
+                <h4>Your Recent Exercises</h4>
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Exercise</th>
+                        <th scope="col">Performed</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <tr repeat.for="perf of performances">
+                            <td>${perf.userExercise.exerciseType.name}</td>
+                            <td>${toLocaleDateString(perf.performedAt)}</td>
+                            <td><button class="btn btn-warning" click.trigger="loadSetPage(perf.id)">Entries</button></td>
+                        </tr>
+                    </tbody>
+                  </table>
+            </div>
+
+            <canvas if.bind="exerciseType && maxSetEntries" class="w-100" id="scatterChart"></canvas>
+            <h5 else if.bind="exerciseType">No ${exerciseType.name.toLowerCase()} entries for this user yet!</h5>
+
+                <button class="btn btn-light m-3" repeat.for="calc of calcArray" click.trigger="setSetEntriesToCalcArray($index)">${calc.valueType}</button>
+        </div>
+
+    </div>
+</div>

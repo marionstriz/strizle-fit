@@ -1,0 +1,52 @@
+<import from="../../components/measurement-types/MeasurementTypesNav"></import>
+
+<div if.bind="!identityService.identityState.user" class="row d-flex h-100 align-items-center">
+    <div class="col md-6">
+        <h1 class="text-center">Please sign in!</h1>
+    </div>
+</div>
+<div else class="row d-flex h-100 justify-content-center text-center align-items-center">
+    <div class="card">
+        <div if.bind="successMsg" class="h5 p-3 mb-2 bg-success text-white success-panel">${successMsg}</div>
+        <nav class="navbar">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#typesNav" aria-expanded="false" aria-controls="typesNav" aria-label="Toggle navigation">
+                Graphs
+            </button>
+            <button class="btn btn-info" click.trigger="toRecentMeasurementsAsync()">
+                Recent Measurements
+            </button>
+            <button class="btn btn-info" click.trigger="toAddMeasurementAsync()">
+                Add
+            </button>
+        </nav>
+        <measurement-types-nav class="collapse" id="typesNav"></measurement-types-nav>
+            <div class="card-body pt-3">
+                
+                <h4 if.bind="measurementType && measurements" class="card-title text-center">${measurementType.name}</h4>
+                <div if.bind="!measurementType">
+                    <h4>Your Recent Measurements</h4>
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">Type</th>
+                            <th scope="col">Value</th>
+                            <th scope="col">Measured</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr repeat.for="msrm of measurements">
+                            <td>${msrm.measurementType.name}</td>
+                            <td>${msrm.value + msrm.valueUnit.symbol}</td>
+                            <td>${toLocaleDateString(msrm.measuredAt)</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+
+                <canvas if.bind="measurementType && measurements" class="w-100" id="scatterChart"></canvas>
+                <h5 else if.bind="measurementType">No ${measurementType.name.toLowerCase()} measurements for this user yet!</h5>
+
+                <button class="btn btn-light m-3" repeat.for="calc of calcArray" click.trigger="setMeasurementsToCalcArray($index)">${calc.valueType}</button>
+            </div>
+    </div>
+</div>

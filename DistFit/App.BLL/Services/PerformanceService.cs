@@ -15,4 +15,14 @@ public class PerformanceService
     ) : base(repository, mapper)
     {
     }
+
+    public async Task<IEnumerable<Performance>> GetAllAsync(Guid userId, bool noTracking = true)
+    {
+        return (await Repository.GetAllAsync(userId, noTracking)).Select(x => Mapper.Map(x)!);
+    }
+    
+    public async Task<IEnumerable<Performance>> GetAllByTypeIdAsync(Guid typeId, Guid userId, bool noTracking = true)
+    {
+        return (await Repository.GetAllByTypeIdAsync(typeId, userId, noTracking)).Select(x => Mapper.Map(x)!);
+    }
 }

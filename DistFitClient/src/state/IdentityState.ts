@@ -1,4 +1,3 @@
-import { EventAggregator, IDisposable } from "aurelia";
 import IAppUser from "../domain/IAppUser";
 
 export default class IdentityState {

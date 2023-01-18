@@ -1,0 +1,49 @@
+<div class="container py-5 h-100">
+    <div class="row justify-content-center align-items-center h-100">
+      <div class="col-12 col-lg-9 col-xl-7">
+        <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+          <div class="card-body p-4 p-md-5">
+            <h3 class="pb-2 pb-md-0 mb-md-4">Add exercise performance</h3>
+
+            <p if.bind="error" class="text-danger">${error}</p>
+            <form>
+
+              <div class="row">
+                <div class="col-12 mb-4">
+
+                  <div class="form-outline w-100">
+                    <label class="form-label">Choose type:</label>
+                    <select value.bind="typeId" class="select form-control form-control-lg w-100">
+                        <option value="0" disabled>Choose type</option>
+                        <option repeat.for="type of exerciseTypes" value.bind="type.id">${type.name}</option>
+                    </select>
+                  </div>
+
+                </div>
+              </div>
+
+              <label class="form-label">Performed at:</label>
+              <div class="row">
+                <div class="col-md-6 mb-4 pb-2">
+
+                  <input value.bind="performedDate" class="form-control form-control-lg" type="date"/>
+
+                </div>
+                <div class="col-md-6 mb-4 pb-2">
+
+                  <input value.bind="performedTime" class="form-control form-control-lg" type="time"/>
+
+                </div>
+              </div>
+
+              <div class="d-flex row mt-2 pt-2 justify-content-center">
+                <input class="col-sm btn btn-info btn-lg m-1" click.trigger="addAndGoToListAsync()" value="Add Exercise" />
+                <input class="col-sm btn btn-warning btn-lg m-1" click.trigger="addAndGoToSetsAsync()" value="To Entries" />
+                <input class="col-sm btn btn-danger btn-lg m-1" click.trigger="backToListAsync()" value="Cancel" />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

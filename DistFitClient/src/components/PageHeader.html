@@ -5,20 +5,23 @@
   </button>
   <div class="collapse navbar-collapse" id="navbar-nav-id">
     <ul class="w-100 navbar-nav">
-      <li if.bind="identityState.user !== null" class="nav-item distfit-navbar-item">
+      <li if.bind="identityService.identityState.user" class="nav-item distfit-navbar-item">
+        <a class="nav-link" href="exercises">Exercises</a>
+      </li>
+      <li if.bind="identityService.identityState.user" class="nav-item distfit-navbar-item">
         <a class="nav-link" href="measurements">Measurements</a>
-      </li if.bind="identityState.user !== null">
+      </li>
       <div class="d-flex w-100 justify-content-end">
-      <li if.bind="identityState.user === null" class="nav-item distfit-navbar-item">
+      <li if.bind="!identityService.identityState.user" class="nav-item distfit-navbar-item">
         <a class="nav-link" href="login">Sign in</a>
       </li>
-      <li if.bind="identityState.user === null" class="nav-item distfit-navbar-item distfit-navbar-last-item">
+      <li if.bind="!identityService.identityState.user" class="nav-item distfit-navbar-item distfit-navbar-last-item">
         <a class="nav-link" href="#">Register</a>
       </li>
-      <li class="nav-item distfit-navbar-item" if.bind="identityState.user !== null">
-        <span class="nav-link">${identityState.user.email}</span>
+      <li class="nav-item distfit-navbar-item" if.bind="identityService.identityState.user">
+        <span class="nav-link">${identityService.identityState.user.email}</span>
       </li>
-      <li if.bind="identityState.user !== null" class="nav-item distfit-navbar-item distfit-navbar-last-item">
+      <li if.bind="identityService.identityState.user" class="nav-item distfit-navbar-item distfit-navbar-last-item">
         <a class="nav-link" click.trigger="logoutAsync()" href="#">Log out</a>
       </li>
     </div>

@@ -5,6 +5,7 @@ using App.Domain.Identity;
 using Base.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileSystemGlobbing.Internal.PatternContexts;
 
 namespace WebApp;
 
@@ -31,6 +32,9 @@ public static class AppDataHelper
 
         using var context = serviceScope
             .ServiceProvider.GetService<AppDbContext>();
+        
+        using var userManager = serviceScope.ServiceProvider.GetService<UserManager<AppUser>>();
+        using var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<AppRole>>();
 
         if (context == null)
         {
@@ -49,9 +53,6 @@ public static class AppDataHelper
         }
         if (conf.GetValue<bool>("DataInitialization:SeedIdentity"))
         {
-            using var userManager = serviceScope.ServiceProvider.GetService<UserManager<AppUser>>();
-            using var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<AppRole>>();
-
             if (userManager == null || roleManager == null)
             {
                 throw new NullReferenceException("userManager or roleManager cannot be null");
@@ -114,56 +115,143 @@ public static class AppDataHelper
         }
         if (conf.GetValue<bool>("DataInitialization:SeedData"))
         {
-            var changesMade = false;
-            if (!context.ExerciseTypes.Any())
-            {
-                var exLangStr = new LangStr("Squat", LangStr.DefaultCulture);
-                exLangStr.SetTranslation("Kükk", "et-EE");
-                var exerciseTypeOne = new ExerciseType {Name = exLangStr};
-                context.ExerciseTypes.Add(exerciseTypeOne);
-                changesMade = true;
-            }
+            if (context.ExerciseTypes.Any() || context.Units.Any() ||
+                context.MeasurementTypes.Any() || context.Measurements.Any()) return;
             
-            if (!context.Units.Any())
+            var squatLangStr = new LangStr("Squat", LangStr.DefaultCulture);
+            squatLangStr.SetTranslation("Kükk", "et-EE");
+            var squat = new ExerciseType {Name = squatLangStr};
+            context.ExerciseTypes.Add(squat);
+            
+            var dlLangStr = new LangStr("Deadlift", LangStr.DefaultCulture);
+            dlLangStr.SetTranslation("Jõutõmme", "et-EE");
+            var deadlift = new ExerciseType {Name = dlLangStr};
+            context.ExerciseTypes.Add(deadlift);
+            
+            var kgNameLangStr = new LangStr("Kilogram", LangStr.DefaultCulture);
+            kgNameLangStr.SetTranslation("Kilogramm", "et-EE");
+            var kg = new Unit
             {
-                var kgNameLangStr = new LangStr("Kilogram", LangStr.DefaultCulture);
-                kgNameLangStr.SetTranslation("Kilogramm", "et-EE");
-                var kg = new Unit
-                {
-                    
-                    Name = kgNameLangStr,
-                    Symbol = new LangStr("kg", LangStr.DefaultCulture)
-                };
-                context.Units.Add(kg);
-                context.SaveChanges();
-                changesMade = true;
-            }
-            if (!context.MeasurementTypes.Any())
+                Name = kgNameLangStr,
+                Symbol = new LangStr("kg", LangStr.DefaultCulture)
+            };
+            context.Units.Add(kg);
+            
+            var timesLangStr = new LangStr("Time", LangStr.DefaultCulture);
+            timesLangStr.SetTranslation("Kord", "et-EE");
+            var times = new Unit
             {
-                var weightLangStr = new LangStr("Weight", LangStr.DefaultCulture);
-                weightLangStr.SetTranslation("Kaal", "et-EE");
-                var weight = new MeasurementType{Name = weightLangStr};
-                context.MeasurementTypes.Add(weight);
+                Name = timesLangStr,
+                Symbol = new LangStr("x", LangStr.DefaultCulture)
+            };
+            context.Units.Add(times);
+            
+            var lbsLangString = new LangStr("Pound", LangStr.DefaultCulture);
+            lbsLangString.SetTranslation("Nael", "et-EE");
+            var pounds = new Unit
+            {
+                Name = lbsLangString,
+                Symbol = new LangStr("lbs", LangStr.DefaultCulture)
+            };
+            context.Units.Add(pounds);
+            
+            var weightLangStr = new LangStr("Weight", LangStr.DefaultCulture);
+            weightLangStr.SetTranslation("Kaal", "et-EE");
+            var weight = new MeasurementType{Name = weightLangStr};
+            context.MeasurementTypes.Add(weight);
                 
-                var heightLangStr = new LangStr("Height", LangStr.DefaultCulture);
-                heightLangStr.SetTranslation("Pikkus", "et-EE");
-                var height = new MeasurementType{Name = heightLangStr};
-                context.MeasurementTypes.Add(height);
+            var heightLangStr = new LangStr("Height", LangStr.DefaultCulture);
+            heightLangStr.SetTranslation("Pikkus", "et-EE");
+            var height = new MeasurementType{Name = heightLangStr};
+            context.MeasurementTypes.Add(height);
                 
-                var waistCircum = new LangStr("Waist circumference", LangStr.DefaultCulture);
-                waistCircum.SetTranslation("Pihaümbermõõt", "et-EE");
-                var waistCirc = new MeasurementType{Name = waistCircum};
-                context.MeasurementTypes.Add(waistCirc);
+            var waistCircum = new LangStr("Waist circumference", LangStr.DefaultCulture);
+            waistCircum.SetTranslation("Pihaümbermõõt", "et-EE");
+            var waistCirc = new MeasurementType{Name = waistCircum};
+            context.MeasurementTypes.Add(waistCirc);
                 
-                var hipsCircum = new LangStr("Hip circumference", LangStr.DefaultCulture);
-                hipsCircum.SetTranslation("Puusaümbermõõt", "et-EE");
-                var hipsCirc = new MeasurementType{Name = hipsCircum};
-                context.MeasurementTypes.Add(hipsCirc);
-                
-                context.SaveChanges();
-                changesMade = true;
+            var hipsCircum = new LangStr("Hip circumference", LangStr.DefaultCulture);
+            hipsCircum.SetTranslation("Puusaümbermõõt", "et-EE");
+            var hipsCirc = new MeasurementType{Name = hipsCircum};
+            context.MeasurementTypes.Add(hipsCirc);
+
+            if (userManager == null)
+            {
+                throw new NullReferenceException("userManager cannot be null");
             }
-            if (changesMade) context.SaveChanges();
+            var user = userManager.FindByEmailAsync("mastri@itcollege.ee").Result;
+            if (user == null)
+            {
+                throw new NullReferenceException("Cannot find user with email mastri@itcollege.ee");
+            }
+
+            context.SaveChanges();
+
+            var mastriWeightMeasurement1 = new Measurement
+            {
+                AppUserId = user.Id,
+                MeasuredAt = new DateTime(2022, 12, 15, 12, 0, 0, DateTimeKind.Utc),
+                Value = 70,
+                ValueUnitId = kg.Id,
+                MeasurementTypeId = weight.Id
+            };
+            context.Measurements.Add(mastriWeightMeasurement1);
+            
+            var mastriWeightMeasurement2 = new Measurement
+            {
+                AppUserId = user.Id,
+                MeasuredAt = new DateTime(2023, 1, 15, 15, 30, 0, DateTimeKind.Utc),
+                Value = 65,
+                ValueUnitId = kg.Id,
+                MeasurementTypeId = weight.Id
+            };
+            context.Measurements.Add(mastriWeightMeasurement2);
+            
+            var mastriUserExercise1 = new UserExercise
+            {
+                AppUserId = user.Id,
+                ExerciseTypeId = squat.Id
+            };
+            context.UserExercises.Add(mastriUserExercise1);
+            
+            var mastriPerformance1 = new Performance
+            {
+                UserExerciseId = mastriUserExercise1.Id,
+                PerformedAt = new DateTime(2023, 1, 15, 12, 0, 0, DateTimeKind.Utc)
+            };
+            context.Performances.Add(mastriPerformance1);
+            
+            var mastriSetEntry1 = new SetEntry
+            {
+                PerformanceId = mastriPerformance1.Id,
+                Quantity = 12,
+                QuantityUnitId = times.Id,
+                Weight = 60,
+                WeightUnitId = kg.Id
+            };
+            context.SetEntries.Add(mastriSetEntry1);
+            
+            var mastriSetEntry2 = new SetEntry
+            {
+                PerformanceId = mastriPerformance1.Id,
+                Quantity = 10,
+                QuantityUnitId = times.Id,
+                Weight = 65,
+                WeightUnitId = kg.Id
+            };
+            context.SetEntries.Add(mastriSetEntry2);
+            
+            var mastriSetEntry3 = new SetEntry
+            {
+                PerformanceId = mastriPerformance1.Id,
+                Quantity = 6,
+                QuantityUnitId = times.Id,
+                Weight = 70,
+                WeightUnitId = kg.Id
+            };
+            context.SetEntries.Add(mastriSetEntry3);
+
+            context.SaveChanges();
         }
     }
 }

@@ -16,5 +16,6 @@ public class UserExercise : DomainEntityMetaId
     [Display(ResourceType = typeof(Base.Resources.Common), Name = nameof(AppUser))]
     public AppUser? AppUser { get; set; }
     
+    public ICollection<Performance>? Performances { get; set; }
     public ICollection<UserSessionExercise>? UserSessionExercises { get; set; }
 }

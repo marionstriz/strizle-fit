@@ -1,0 +1,72 @@
+<div class="container py-5 h-100">
+    <div class="row justify-content-center align-items-center h-100">
+      <div class="col-12 col-lg-9 col-xl-7">
+        <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+          <div class="card-body p-4 p-md-5">
+            <h3 class="pb-2 pb-md-0 mb-md-5">Please fill out the registration form:</h3>
+            <form>
+
+              <div class="row">
+                <div class="col-md-6 mb-4">
+
+                  <div class="form-outline">
+                    <input type="text" value.bind="firstName" id="firstName" class="form-control form-control-lg" />
+                    <label class="form-label" for="firstName">First Name</label>
+                    <p if.bind="firstNameError" class="text-danger">${firstNameError}</p>
+                  </div>
+
+                </div>
+                <div class="col-md-6 mb-4">
+
+                  <div class="form-outline">
+                    <input type="text" value.bind="lastName" id="lastName" class="form-control form-control-lg" />
+                    <label class="form-label" for="lastName">Last Name</label>
+                    <p if.bind="lastNameError" class="text-danger">${lastNameError}</p>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-12 mb-4 d-flex">
+
+                  <div class="form-outline datepicker w-100">
+                    <input type="email" autocomplete="username" value.bind="email" class="form-control form-control-lg" id="email" />
+                    <label for="email" class="form-label">Email</label>
+                    <p if.bind="emailError" class="text-danger">${emailError}</p>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-4 pb-2 d-flex align-items-center">
+
+                  <div class="form-outline">
+                    <input type="password" autocomplete="new-password" value.bind="password" id="password" class="form-control form-control-lg" />
+                    <label class="form-label" for="password">Password</label>
+                    <br/><input type="checkbox" change.trigger='changePasswordVisibility()'> Show Password
+                    <p if.bind="passwordError" class="text-danger">${passwordError}</p>
+                  </div>
+
+                </div>
+                <div class="col-md-6 mb-4 pb-2">
+
+                  <div class="form-outline">
+                    <input type="password" autocomplete="new-password" value.bind="passwordConf" id="passwordConf" class="form-control form-control-lg" />
+                    <label class="form-label" for="passwordConf">Confirm Password</label>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="mt-2 pt-2">
+                <input class="btn btn-secondary btn-lg" click.trigger="registerClickedAsync()" value="Create Account" />
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

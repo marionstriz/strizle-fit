@@ -2,6 +2,7 @@ using App.Contracts.BLL;
 using Microsoft.AspNetCore.Mvc;
 using App.Public.v1.Mappers;
 using AutoMapper;
+using Base.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 
@@ -32,7 +33,7 @@ public class PerformanceController : ControllerBase
 
     // GET: api/Performance
     /// <summary>
-    /// Get all performances available in application, requires authorisation
+    /// Get all performances available in application, requires authorisation and authentication by user
     /// </summary>
     /// <returns>Enumerable of performances</returns>
     [Produces( "application/json" )]
@@ -42,7 +43,7 @@ public class PerformanceController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<App.Public.DTO.v1.Performance>>> GetPerformances()
     {
-        return Ok((await _bll.Performances.GetAllAsync()).Select(x => _mapper.Map(x)));
+        return Ok((await _bll.Performances.GetAllAsync(User.GetUserId(), true)).Select(x => _mapper.Map(x)));
     }
 
     // GET: api/Performance/5
@@ -61,12 +62,30 @@ public class PerformanceController : ControllerBase
     {
         var performance = await _bll.Performances.FirstOrDefaultAsync(id);
 
-        if (performance == null)
+        if (performance == null || performance.UserExercise!.AppUserId != User.GetUserId())
         {
             return NotFound();
         }
 
         return _mapper.Map(performance)!;
+    }
+    
+    // GET: api/Performance/type/5
+    /// <summary>
+    /// Get all user performances by exercise type ID, requires authorisation
+    /// </summary>
+    /// <param name="id">Performance GUID</param>
+    /// <returns>Enumerable of performances</returns>
+    [Produces("application/json")]
+    [Consumes("application/json")]
+    [ProducesResponseType(typeof(App.Public.DTO.v1.Measurement), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpGet("type/{id}")]
+    public async Task<ActionResult<IEnumerable<App.Public.DTO.v1.Performance>>> GetPerformancesByType(Guid id)
+    {
+        return Ok((await _bll.Performances.GetAllByTypeIdAsync(id, User.GetUserId()))
+            .Select(x => _mapper.Map(x)));
     }
 
     // PUT: api/Performance/5
@@ -86,7 +105,7 @@ public class PerformanceController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> PutPerformance(Guid id, App.Public.DTO.v1.Performance performance)
     {
-        if (id != performance.Id)
+        if (id != performance.Id || performance.UserExercise!.AppUserId != User.GetUserId())
         {
             return BadRequest();
         }
@@ -140,7 +159,7 @@ public class PerformanceController : ControllerBase
     public async Task<IActionResult> DeletePerformance(Guid id)
     {
         var performance = await _bll.Performances.FirstOrDefaultAsync(id);
-        if (performance == null)
+        if (performance == null || performance.UserExercise!.AppUserId != User.GetUserId())
         {
             return NotFound();
         }

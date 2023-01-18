@@ -310,9 +310,6 @@ namespace App.DAL.EF.Migrations
                         .HasMaxLength(32)
                         .HasColumnType("character varying(32)");
 
-                    b.Property<Guid>("ExerciseId")
-                        .HasColumnType("uuid");
-
                     b.Property<DateTime>("PerformedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -323,9 +320,12 @@ namespace App.DAL.EF.Migrations
                         .HasMaxLength(32)
                         .HasColumnType("character varying(32)");
 
+                    b.Property<Guid>("UserExerciseId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ExerciseId");
+                    b.HasIndex("UserExerciseId");
 
                     b.ToTable("Performances");
                 });
@@ -836,13 +836,13 @@ namespace App.DAL.EF.Migrations
 
             modelBuilder.Entity("App.Domain.Performance", b =>
                 {
-                    b.HasOne("App.Domain.UserExercise", "Exercise")
-                        .WithMany()
-                        .HasForeignKey("ExerciseId")
+                    b.HasOne("App.Domain.UserExercise", "UserExercise")
+                        .WithMany("Performances")
+                        .HasForeignKey("UserExerciseId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Exercise");
+                    b.Navigation("UserExercise");
                 });
 
             modelBuilder.Entity("App.Domain.Program", b =>
@@ -1084,6 +1084,8 @@ namespace App.DAL.EF.Migrations
 
             modelBuilder.Entity("App.Domain.UserExercise", b =>
                 {
+                    b.Navigation("Performances");
+
                     b.Navigation("UserSessionExercises");
                 });
 #pragma warning restore 612, 618
