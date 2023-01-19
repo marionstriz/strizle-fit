@@ -35,7 +35,8 @@ public class ProgramRepository
 
     public Program AddProgramWithSave(Program program, Guid userId, bool noTracking = true)
     {
-        program.Id = new Guid();
+        if (program.Id == Guid.Empty) program.Id = new Guid();
+        
         var programSave = new ProgramSaved
         {
             AppUserId = userId,

@@ -158,3 +158,8 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
+
+/// <summary>
+/// Program class for testing purposes.
+/// </summary>
+public partial class Program { }
