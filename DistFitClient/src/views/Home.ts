@@ -23,6 +23,10 @@ export class Home {
         await this.router.load('/register');
     }
 
+    async loadProgramsAsync() {
+        await this.router.load('/programs')
+    }
+
     unimplemented() {
         console.log("unimplemented");
     }

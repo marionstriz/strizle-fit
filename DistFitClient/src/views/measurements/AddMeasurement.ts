@@ -23,15 +23,16 @@ export class AddMeasurement {
     measuredTime?: string;
 
     error?: string;
+    load: boolean;
     
     constructor(private identityService: IdentityService,
         private typeService: MeasurementTypeService,
         private measurementService: MeasurementService,
         private unitService: UnitService,
-        private measurementPage: Measurements,
         private eventAggregator: EventAggregator,
         @IRouter private router: IRouter) {
 
+        this.load = false;
         unitService.getAllAsync(identityService).then((res) => {
             if (res.error != null) {
                 identityService.logout();
@@ -57,8 +58,8 @@ export class AddMeasurement {
 
         if (type?.name == 'Weight') {
             this.validUnits = this.units.filter(u => u.symbol === 'kg' || u.symbol === 'lbs');
-        } else if (type?.name === 'Height') {
-            this.validUnits = this.units.filter(u => u.symbol === 'cm' || u.symbol === '"');
+        } else if (type?.name === 'Height' || type?.name === 'Waist circumference' || type?.name === 'Hip circumference') {
+            this.validUnits = this.units.filter(u => u.symbol === 'cm' || u.symbol === 'in');
         }
         
         else this.validUnits = this.units;
@@ -66,6 +67,7 @@ export class AddMeasurement {
 
     async addMeasurementAsync() {
 
+        if (this.load) return;
         this.error = '';
         if (!this.value || !this.unitId || !this.typeId || !this.measuredDate || !this.measuredTime) {
             this.error = 'Please enter all values';
@@ -81,12 +83,15 @@ export class AddMeasurement {
             measuredAt: newDate
         }
 
+        this.load = true;
         await this.measurementService.addAsync(measurement, this.identityService);
 
         await this.router.load('/measurements/graphs/' + this.typeId! + '/scsa');
     }
 
     async backToListAsync() {
+        if (this.load) return;
+        this.load = true;
         await this.router.load('/measurements');
     }
 }

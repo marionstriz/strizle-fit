@@ -19,12 +19,16 @@
             </button>
         </nav>
         <exercise-types-nav class="collapse" id="typesNav"></exercise-types-nav>
+        <hr/>
         <div class="card-body pt-3">
                 
-            <h4 if.bind="exerciseType && maxSetEntries" class="card-title text-center">${exerciseType.name}</h4>
+            <div if.bind="exerciseType && maxSetEntries">
+                <h4 class="card-title text-center">${exerciseType.name}</h4>
+                <p>The graph reflects the highest weight within any given performance. Hover over points to see exact values. Change unit below.</p>
+            </div>
             <div if.bind="!exerciseType">
-                <h4>Your Recent Exercises</h4>
-                <table class="table">
+                <h4>${message}</h4>
+                <table if.bind="performances.length !== 0" class="table">
                     <thead>
                       <tr>
                         <th scope="col">Exercise</th>
@@ -36,14 +40,14 @@
                         <tr repeat.for="perf of performances">
                             <td>${perf.userExercise.exerciseType.name}</td>
                             <td>${toLocaleDateString(perf.performedAt)}</td>
-                            <td><button class="btn btn-warning" click.trigger="loadSetPage(perf.id)">Entries</button></td>
+                            <td><button class="btn btn-warning entry-btn-${$index}" click.trigger="loadSetPage(perf.id, $index)">Entries</button></td>
                         </tr>
                     </tbody>
                   </table>
             </div>
 
-            <canvas if.bind="exerciseType && maxSetEntries" class="w-100" id="scatterChart"></canvas>
-            <h5 else if.bind="exerciseType">No ${exerciseType.name.toLowerCase()} entries for this user yet!</h5>
+            <h5 if.bind="exerciseType && !maxSetEntries">${message}</h5>
+            <canvas if.bind="exerciseType && !message.includes('No')" id="scatterChart"></canvas>
 
                 <button class="btn btn-light m-3" repeat.for="calc of calcArray" click.trigger="setSetEntriesToCalcArray($index)">${calc.valueType}</button>
         </div>

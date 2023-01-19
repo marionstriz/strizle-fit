@@ -1,5 +1,5 @@
+import { IMeasurement } from './../../domain/IMeasurement';
 import { MeasurementTypeService } from './../../services/MeasurementTypeService';
-import { IMeasurement } from '../../domain/IMeasurement';
 import { MeasurementService } from '../../services/MeasurementService';
 import { IdentityService } from '../../services/IdentityService';
 import { EventAggregator, IDisposable, IRouter, Params } from 'aurelia';
@@ -7,12 +7,12 @@ import { IMeasurementType } from '../../domain/IMeasurementType';
 import { IValueCalculationArray } from '../../domain/IValueCalculationArray';
 import { Chart, Point } from 'chart.js/auto';
 import Helpers from '../../helpers/Helpers';
-import $ from 'jquery';
 
 export class Measurements {
 
     private subscriptions: IDisposable[] = [];
     successMsg?: string;
+    message?: string;
 
     measurementType: IMeasurementType | null = null;
     measurements: IMeasurement[] | null = null;
@@ -24,8 +24,6 @@ export class Measurements {
         private measurementTypeService: MeasurementTypeService,
         private eventAggregator: EventAggregator,
         @IRouter private router: IRouter) {
-
-        this.toRecentMeasurementsAsync();
         
         this.subscriptions.push(this.eventAggregator.subscribe('newActiveMeasurementType', 
             (type: IMeasurementType | null) => this.newMeasurementTypeReceived(type)));
@@ -47,7 +45,10 @@ export class Measurements {
     }
 
     async loading(params: Params) {
-        if (!params.id) return;
+        if (!params.id) {
+            this.toRecentMeasurementsAsync();
+            return;
+        };
         let res = await this.measurementTypeService.getAsync(params.id, this.identityService);
 
         if (res.error) return;
@@ -62,10 +63,15 @@ export class Measurements {
 
     async newMeasurementTypeReceived(type: IMeasurementType | null) {
         this.measurementType = type;
+
         if (!type) {
             this.calcArray = null;
             return;
         }
+
+        this.nullAll();
+        this.message = 'Loading...';
+
         let res = await this.measurementService.getByMeasurementTypeIdAsync(type.id, this.identityService);
 
         if (res.error) {
@@ -73,15 +79,15 @@ export class Measurements {
             return;
         }
         if (res.data!.length === 0) {
-            this.nullAll();
+            this.message = `No ${this.measurementType!.name.toLowerCase()} measurements for this user yet!`;
         }
         else if (type.name === 'Weight') {
             this.setWeightCalcs(res.data!);
-        } else this.nullAll();
+        } else this.setLengthCalcs(res.data!);
 
         if (this.calcArray) {
-            this.measurements = this.calcArray[0].data;
-            this.buildChart();
+            let measurements = this.calcArray[0].data;
+            this.buildChart(measurements);
         }
         let collapsable = document.querySelector('#typesNav');
 
@@ -94,7 +100,7 @@ export class Measurements {
 
         this.measurements = this.calcArray![index].data;
 
-        this.buildChart();
+        this.buildChart(this.measurements);
     }
 
     private setWeightCalcs(data: IMeasurement[]) {
@@ -123,21 +129,46 @@ export class Measurements {
         this.calcArray.push({valueType: 'lbs', data: lbsArray});
     }
 
-    private buildChart() {
+    private setLengthCalcs(data: IMeasurement[]) {
+        this.calcArray = [];
+
+        let cmArray: IMeasurement[] = [];
+        let inchArray: IMeasurement[] = [];
+
+        data.forEach(msrm => {
+
+            if (msrm.valueUnit!.symbol === 'cm') {
+                cmArray.push(msrm);
+                let inchMsrm: IMeasurement = {...msrm, value: Math.round(msrm.value * 3.937) / 10};
+                inchMsrm.valueUnit = {name: 'Inch', symbol: 'in'};
+                inchArray.push(inchMsrm);
+            } else if (msrm.valueUnit!.symbol === 'in') {
+                inchArray.push(msrm);
+                let cmMsrm: IMeasurement = {...msrm, value: Math.round(msrm.value * 25.4) / 10};
+                cmMsrm.valueUnit = {name: 'Centimeter', symbol: 'cm'};
+                cmArray.push(cmMsrm);
+            }
+        });
+
+        this.calcArray.push({valueType: 'cm', data: cmArray});
+        this.calcArray.push({valueType: 'in', data: inchArray});
+    }
+
+    private buildChart(measurements: IMeasurement[]) {
 
         this.destroyChart();
 
         var ctxL = (document.getElementById("scatterChart")! as HTMLCanvasElement).getContext('2d');
 
-        this.measurements?.sort((a, b) => new Date(a.measuredAt).valueOf() - new Date(b.measuredAt).valueOf());
+        measurements?.sort((a, b) => new Date(a.measuredAt).valueOf() - new Date(b.measuredAt).valueOf());
 
-        const data = this.measurements?.map(m => {
+        const data = measurements?.map(m => {
             return {
                 x: new Date(m.measuredAt),
                 y: m.value
         }});
 
-        var unitSymbol = this.measurements?.at(0)?.valueUnit!.symbol;
+        var unitSymbol = measurements?.at(0)?.valueUnit!.symbol;
 
         new Chart(
             ctxL!,
@@ -150,6 +181,9 @@ export class Measurements {
                     }]
                 },
                 options: {
+                    animation: {
+                        duration: 0
+                    },
                     scales: {
                         x: {
                             ticks: {
@@ -177,6 +211,7 @@ export class Measurements {
                 }
             }
         );
+        this.measurements = measurements;
     }
 
     private destroyChart() {
@@ -188,12 +223,18 @@ export class Measurements {
     }
 
     async toRecentMeasurementsAsync() {
+        this.destroyChart();
+        this.message = 'Loading...';
+        this.measurements = [];
         this.measurementService.getAllAsync(this.identityService).then(res => {
             if (res.error) {
                 this.identityService.logout();
                 return;
             }
             this.measurements = res.data!.sort((a, b) => new Date(b.measuredAt).valueOf() - new Date(a.measuredAt).valueOf());
+            if (this.measurements.length > 0) {
+                this.message = 'My Recent Measurements';
+            } else this.message = 'You have no measurements yet.'
         });
 
         this.eventAggregator.publish("newActiveMeasurementType", null);

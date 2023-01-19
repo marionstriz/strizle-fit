@@ -73,6 +73,11 @@ public class MeasurementController : ControllerBase
         return _mapper.Map(measurement)!;
     }
     
+    // GET: api/Measurement/type/5
+    /// <summary>
+    /// Get all measurements owned by user with the provided type, requires authorisation
+    /// </summary>
+    /// <returns>Enumerable of measurements</returns>
     [Produces("application/json")]
     [Consumes("application/json")]
     [ProducesResponseType(typeof(App.Public.DTO.v1.Measurement), StatusCodes.Status200OK)]

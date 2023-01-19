@@ -7,7 +7,7 @@
         <div if.bind="identityService.identityState.user" class="d-flex flex-column w-100">
             <a click.trigger="loadExercisesAsync()" class="btn btn-lg btn-light my-3">Add Exercise</a>
             <a click.trigger="loadMeasurementsAsync()" class="btn btn-lg btn-light my-3">Add Measurement</a>
-            <a click.trigger="unimplemented()" class="btn btn-lg btn-light my-3">My Programs</a>
+            <a click.trigger="loadProgramsAsync()" class="btn btn-lg btn-light my-3">My Programs</a>
         </div>
         <div else class="d-flex flex-column w-100">
             <a click.trigger="loadLoginAsync()" class="btn btn-lg btn-light my-3">Sign in</a>

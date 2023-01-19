@@ -14,7 +14,7 @@
                   <div class="form-outline w-100">
                     <label class="form-label">Choose type:</label>
                     <select value.bind="typeId" change.delegate="changeUnitsToType(typeId)" class="select form-control form-control-lg w-100">
-                        <option value="0" disabled>Choose type</option>
+                        <option value="0" disabled selected hidden>Loading...</option>
                         <option repeat.for="type of measurementTypes" value.bind="type.id">${type.name}</option>
                     </select>
                   </div>
@@ -34,8 +34,8 @@
                 <div class="col-md-6 mb-4 pb-2">
 
                   <div class="form-outline">
-                    <select value.bind="unitId" class="select form-control form-control-lg w-100">
-                        <option value="0" disabled>Choose unit</option>
+                    <select value.bind="unitId" aria-placeholder="" class="select form-control form-control-lg w-100">
+                        <option value="0" disabled selected hidden>Loading...</option>
                         <option repeat.for="unit of validUnits" value.bind="unit.id">${unit.symbol}</option>
                       </select>
                   </div>
@@ -55,6 +55,8 @@
 
                 </div>
               </div>
+
+              <p if.bind="load">Loading...</p>
 
               <div class="d-flex row mt-2 pt-2 justify-content-center">
                 <input class="col-sm btn btn-info btn-lg m-1" click.trigger="addMeasurementAsync()" value="Add Measurement" />

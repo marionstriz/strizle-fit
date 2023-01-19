@@ -12,6 +12,7 @@ import {v4 as uuidv4} from 'uuid';
 export class AddExercise {
 
     error?: string;
+    load: boolean;
 
     exerciseTypes: IExerciseType[] = [];
     userExercises: IUserExercise[] = [];
@@ -25,6 +26,8 @@ export class AddExercise {
         private userExerciseService: UserExerciseService,
         private performanceService: PerformanceService,
         @IRouter private router: IRouter) {
+
+            this.load = false;
 
             exerciseTypeService.getAllAsync(identityService).then(res => {
                 if (res.error != null) {
@@ -44,13 +47,15 @@ export class AddExercise {
     }
 
     async backToListAsync() {
+        if (this.load) return;
+        this.load = true;
         await this.router.load('/exercises');
     }
 
     async addAndGoToListAsync() {
         let perf = await this.addAsync();
         if (!perf) return;
-        await this.backToListAsync();
+        await this.router.load('/exercises');
     }
 
     async addAndGoToSetsAsync() {
@@ -60,6 +65,7 @@ export class AddExercise {
     }
 
     async addAsync(): Promise<IPerformance | null> {
+        if (this.load) return null;
         this.error = '';
         if (!this.typeId || !this.performedDate || !this.performedTime) {
             this.error = 'Please enter all values';
@@ -68,6 +74,7 @@ export class AddExercise {
 
         let userExercise = this.userExercises.find(ue => ue.exerciseTypeId === this.typeId!);
 
+        this.load = true;
         if (!userExercise) {
             let newUserExercise: IUserExercise = {
                 id: uuidv4(),
@@ -77,6 +84,7 @@ export class AddExercise {
 
             if (res.error) {
                 this.error = 'An error occurred, please try again';
+                this.load = false;
                 return null;
             }
             userExercise = newUserExercise;
@@ -94,6 +102,7 @@ export class AddExercise {
 
         if (res.error) {
             this.error = 'An error occurred, please try again';
+            this.load = false;
             return null;
         }
         return newPerf;

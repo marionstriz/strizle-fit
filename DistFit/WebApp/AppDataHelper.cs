@@ -155,6 +155,24 @@ public static class AppDataHelper
             };
             context.Units.Add(pounds);
             
+            var cmLangString = new LangStr("Centimeter", LangStr.DefaultCulture);
+            cmLangString.SetTranslation("Sentimeeter", "et-EE");
+            var cm = new Unit
+            {
+                Name = cmLangString,
+                Symbol = new LangStr("cm", LangStr.DefaultCulture)
+            };
+            context.Units.Add(cm);
+            
+            var inchLangStr = new LangStr("Inch", LangStr.DefaultCulture);
+            inchLangStr.SetTranslation("Toll", "et-EE");
+            var inch = new Unit
+            {
+                Name = inchLangStr,
+                Symbol = new LangStr("in", LangStr.DefaultCulture)
+            };
+            context.Units.Add(inch);
+            
             var weightLangStr = new LangStr("Weight", LangStr.DefaultCulture);
             weightLangStr.SetTranslation("Kaal", "et-EE");
             var weight = new MeasurementType{Name = weightLangStr};

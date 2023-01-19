@@ -20,6 +20,7 @@ export class Sets {
     weightUnits: IUnit[] = [];
 
     adding: boolean = false;
+    load: boolean = false;
 
     quantityValue?: number;
     quantityUnitId?: string;
@@ -68,10 +69,16 @@ export class Sets {
     }
 
     loadPerformancesAsync() {
+        if (this.load) return;
         this.router.load('/exercises');
     }
 
     async deleteSetAsync(index: number) {
+        if (this.load) return;
+        this.load = true;
+        let btn = document.querySelector('.delete-btn-' + index);
+        btn!.innerHTML = '...';
+
         let set = this.sets.at(index);
 
         let res = await this.setService.deleteAsync(set!.id!, this.identityService);
@@ -81,6 +88,7 @@ export class Sets {
         } else {
             this.sets.splice(index, 1);
         }
+        this.load = false;
     }
 
     addingSet() {
@@ -93,6 +101,8 @@ export class Sets {
                 this.addingError = 'All values must be filled';
                 return;
         }
+        if (this.load) return;
+        this.load = true;
         let newSet: ISetEntry = {
             id: uuidv4(),
             performanceId: this.performanceId,
@@ -105,6 +115,7 @@ export class Sets {
         let res = await this.setService.addAsync(newSet, this.identityService);
         if (res.error) {
             this.addingError = 'Could not add set, please try again';
+            this.load = false;
         } else {
             newSet.quantityUnit = this.units.find(u => u.id === this.quantityUnitId);
             newSet.weightUnit = this.units.find(u => u.id === this.weightUnitId);
@@ -121,6 +132,7 @@ export class Sets {
         this.weightUnitId = undefined;
         this.addingError = undefined;
         this.adding = false;
+        this.load = false;
     }
 
     private async setUnitsAsync(errorString: string): Promise<void> {

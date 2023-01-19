@@ -13,6 +13,8 @@ export class Exercises {
 
     private subscriptions: IDisposable[] = [];
 
+    message?: string;
+
     exerciseType: IExerciseType | null = null;
 
     maxSetEntries?: ISetEntry[];
@@ -42,10 +44,14 @@ export class Exercises {
 
     async newExerciseTypeReceived(type: IExerciseType | null) {
         this.exerciseType = type;
+
         if (!type) {
             this.calcArray = null;
             return;
         }
+        this.nullAll();
+        this.message = 'Loading...';
+
         let res = await this.performanceService.getByExerciseTypeIdAsync(type.id, this.identityService);
 
         if (res.error) {
@@ -53,15 +59,18 @@ export class Exercises {
             return;
         }
         if (res.data!.length === 0) {
-            this.nullAll();
+            this.message = `No ${this.exerciseType!.name.toLowerCase()} set entries for this user yet!`;
         }
         else if (type.name === 'Squat' || type.name === 'Deadlift') {
             await this.setWeightCalcsAsync(res.data!);
         } else this.nullAll();
 
         if (this.calcArray) {
-            this.maxSetEntries = this.calcArray[0].data;
-            this.buildChart();
+            let maxSetEntries = this.calcArray[0].data;
+            if (maxSetEntries.length === 0) {
+                this.calcArray = null;
+                this.message = `No ${this.exerciseType!.name.toLowerCase()} set entries for this user yet!`;
+            } else this.buildChart(maxSetEntries);
         }
         let collapsable = document.querySelector('#typesNav');
 
@@ -70,7 +79,10 @@ export class Exercises {
         }
     }
 
-    loadSetPage(perfId: string) {
+    loadSetPage(perfId: string, index: number) {
+        let btn = document.querySelector('.entry-btn-' + index);
+        btn!.innerHTML = 'Loading...';
+
         this.router.load("/sets/" + perfId);
     }
 
@@ -100,7 +112,7 @@ export class Exercises {
 
             if (res.error || res.data!.length === 0) continue;
 
-            let max = res.data!.sort((a, b) => a.weight! - b.weight!).at(0)!;
+            let max = res.data!.sort((a, b) => b.weight! - a.weight!).at(0)!;
 
             if (max.weightUnit!.symbol === 'kg') {
                 kgArray.push(max);
@@ -120,12 +132,19 @@ export class Exercises {
     }
 
     private setAllPerformances() {
+        this.destroyChart();
+        this.message = 'Loading...';
+        this.performances = [];
         this.performanceService.getAllAsync(this.identityService).then(res => {
             if (res.error) {
                 this.identityService.logout();
                 return;
             }
             this.performances = res.data!.sort((a, b) => new Date(b.performedAt).valueOf() - new Date(a.performedAt).valueOf());
+    
+            if (this.performances.length > 0) {
+                this.message = 'My Recent Exercises';
+            } else this.message = 'You have no exercise performances yet.'
         })
     }
 
@@ -138,25 +157,24 @@ export class Exercises {
 
         this.maxSetEntries = this.calcArray![index].data;
 
-        this.buildChart();
+        this.buildChart(this.maxSetEntries);
     }
 
-    private buildChart(isWeighted: boolean = true) {
+    private buildChart(maxSetEntries: ISetEntry[], isWeighted: boolean = true) {
 
         this.destroyChart();
 
         var ctxL = (document.getElementById("scatterChart")! as HTMLCanvasElement).getContext('2d');
 
-        this.maxSetEntries?.sort((a, b) => new Date(a.performance!.performedAt).valueOf() - new Date(b.performance!.performedAt).valueOf());
+        maxSetEntries?.sort((a, b) => new Date(a.performance!.performedAt).valueOf() - new Date(b.performance!.performedAt).valueOf());
 
-        const data = this.maxSetEntries?.map(m => {
+        const data = maxSetEntries?.map(m => {
             return {
                 x: new Date(m.performance!.performedAt),
                 y: isWeighted ? m.weight : m.quantity
         }});
 
-        var weightUnitSymbol = this.maxSetEntries?.at(0)?.weightUnit?.symbol;
-        var quantityUnitSymbol = this.maxSetEntries?.at(0)?.quantityUnit?.symbol;
+        var weightUnitSymbol = maxSetEntries?.at(0)?.weightUnit?.symbol;
 
         new Chart(
             ctxL!,
@@ -169,6 +187,9 @@ export class Exercises {
                     }]
                 },
                 options: {
+                    animation: {
+                        duration: 0
+                    },
                     scales: {
                         x: {
                             ticks: {
@@ -196,6 +217,7 @@ export class Exercises {
                 }
             }
         );
+        this.maxSetEntries = maxSetEntries;
     }
     
     private destroyChart() {

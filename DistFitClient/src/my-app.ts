@@ -46,6 +46,12 @@ import { route } from 'aurelia';
       title: 'DistFit - Measurements',
     },
     {
+      id: 'programs',
+      path: '/programs',
+      component: import('./views/programs/Programs'),
+      title: 'DistFit - Programs',
+    },
+    {
       id: 'login',
       path: '/login',
       component: import('./views/identity/Login'),

@@ -24,7 +24,7 @@
                             <th scope="row">${$index + 1}</th>
                             <td>${set.quantity + set.quantityUnit.symbol}</td>
                             <td if.bind="set.weight !== undefined">${set.weight + set.weightUnit.symbol}</td>
-                            <td><button click.trigger="deleteSetAsync($index)" class="btn close" aria-label="Close">
+                            <td><button click.trigger="deleteSetAsync($index)" class="btn close delete-btn-${$index}" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button></td>
                         </tr>
@@ -56,9 +56,13 @@
                   </div>
                 </div>
                   <button if.bind="!adding" class="btn btn-info" click.trigger="addingSet()">Add Entry</button>
-                  <span else>
+                  <span if.bind="adding && !load">
                     <button class="btn btn-success" click.trigger="addSetAsync()">Add</button>
                     <button class="btn btn-danger" click.trigger="cancelAdding()">Cancel</button>
+                    <hr/>
+                  </span>
+                  <span if.bind="adding && load">
+                    <h5 >Loading...</h5>
                     <hr/>
                   </span>
                   <button class="btn btn-light" click.trigger="loadPerformancesAsync()">Back To List</button>

@@ -11,6 +11,9 @@
       <li if.bind="identityService.identityState.user" class="nav-item distfit-navbar-item">
         <a class="nav-link" href="measurements">Measurements</a>
       </li>
+      <li if.bind="identityService.identityState.user" class="nav-item distfit-navbar-item">
+        <a class="nav-link" href="programs">Programs</a>
+      </li>
       <div class="d-flex w-100 justify-content-end">
       <li if.bind="!identityService.identityState.user" class="nav-item distfit-navbar-item">
         <a class="nav-link" href="login">Sign in</a>
