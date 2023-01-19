@@ -28,7 +28,8 @@
             </div>
             <div if.bind="!exerciseType">
                 <h4>${message}</h4>
-                <table if.bind="performances.length !== 0" class="table">
+                <table if.bind="performances.length !== 0" class="table table-striped">
+                    <p if.bind="error" class="text-danger">${error}</p>
                     <thead>
                       <tr>
                         <th scope="col">Exercise</th>
@@ -40,7 +41,12 @@
                         <tr repeat.for="perf of performances">
                             <td>${perf.userExercise.exerciseType.name}</td>
                             <td>${toLocaleDateString(perf.performedAt)}</td>
-                            <td><button class="btn btn-warning entry-btn-${$index}" click.trigger="loadSetPage(perf.id, $index)">Entries</button></td>
+                            <td class="d-flex justify-content-end">
+                                <button class="btn btn-warning entry-btn-${$index}" click.trigger="loadSetPage(perf.id, $index)">Entries</button>
+                                <button click.trigger="deletePerformanceAsync($index)" class="btn close delete-btn-${$index}" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </td>
                         </tr>
                     </tbody>
                   </table>

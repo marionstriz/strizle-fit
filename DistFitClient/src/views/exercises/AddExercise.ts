@@ -28,6 +28,7 @@ export class AddExercise {
         @IRouter private router: IRouter) {
 
             this.load = false;
+            if (!identityService.identityState.user) return;
 
             exerciseTypeService.getAllAsync(identityService).then(res => {
                 if (res.error != null) {

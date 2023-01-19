@@ -26,4 +26,9 @@ public class ProgramSavedService
     {
         return (await Repository.GetAllByUserAndGroupsAsync(user, noTracking)).Select(x => Mapper.Map(x)!);
     }
+
+    public async Task<ProgramSaved?> GetProgramSaveByProgramAndUserIdAsync(Guid programId, Guid userId, bool noTracking = true)
+    {
+        return Mapper.Map((await Repository.GetProgramSaveByProgramAndUserIdAsync(programId, userId, noTracking)));
+    }
 }

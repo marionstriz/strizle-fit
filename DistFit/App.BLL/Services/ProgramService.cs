@@ -15,4 +15,9 @@ public class ProgramService
     ) : base(repository, mapper)
     {
     }
+
+    public Program AddProgramWithSave(Program program, Guid userId, bool noTracking = true)
+    {
+        return Mapper.Map(Repository.AddProgramWithSave(Mapper.Map(program)!, userId))!;
+    }
 }

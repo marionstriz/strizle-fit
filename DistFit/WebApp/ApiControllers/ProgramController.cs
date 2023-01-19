@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using App.Public.v1.Mappers;
 using AutoMapper;
 using Base.Domain;
+using Base.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 
@@ -44,7 +45,6 @@ public class ProgramController : ControllerBase
     [Consumes( "application/json" )]
     [ProducesResponseType( typeof( IEnumerable<App.Public.DTO.v1.Program> ), StatusCodes.Status200OK )]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<App.Public.DTO.v1.Program>>> GetPrograms()
     {
@@ -137,7 +137,7 @@ public class ProgramController : ControllerBase
         if (ModelState.IsValid)
         {
             var bllProgram = _mapper.Map(program, culture);
-            _bll.Programs.Add(bllProgram!);
+            _bll.Programs.AddProgramWithSave(bllProgram!, User.GetUserId());
             await _bll.SaveChangesAsync();
         }
 
@@ -166,9 +166,16 @@ public class ProgramController : ControllerBase
     public async Task<IActionResult> DeleteProgram(Guid id)
     {
         var program = await _bll.Programs.FirstOrDefaultAsync(id);
+        
         if (program == null)
         {
             return NotFound();
+        }
+        var programSave = await _bll.ProgramsSaved.GetProgramSaveByProgramAndUserIdAsync(program.Id, User.GetUserId());
+
+        if (programSave == null || !programSave.IsCreator)
+        {
+            return Unauthorized();
         }
 
         _bll.Programs.Remove(program);

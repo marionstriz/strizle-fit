@@ -29,6 +29,7 @@ public class ProgramSavedRepository
         var query = CreateQuery(noTracking)
             .Include(u => u.AppUser)
             .Include(u => u.Program)
+            .ThenInclude(u => u!.DurationUnit)
             .Where(m => m.AppUserId == userId);
         
         return (await query.ToListAsync()).Select(x => Mapper.Map(x)!);
@@ -40,9 +41,20 @@ public class ProgramSavedRepository
         var query = CreateQuery(noTracking)
             .Include(u => u.AppUser)
             .Include(u => u.Program)
+            .ThenInclude(u => u!.DurationUnit)
             .Where(m => 
                 m.AppUserId == claimsPrincipal.GetUserId());
         
         return (await query.ToListAsync()).Select(x => Mapper.Map(x)!);
+    }
+
+    public async Task<ProgramSaved?> GetProgramSaveByProgramAndUserIdAsync(Guid programId, Guid userId, bool noTracking = true)
+    {
+        return Mapper.Map(await CreateQuery(noTracking)
+            .Include(u => u.AppUser)
+            .Include(u => u.Program)
+            .ThenInclude(u => u!.DurationUnit)
+            .Where(u => u.AppUserId == userId && u.ProgramId == programId)
+            .FirstOrDefaultAsync());
     }
 }

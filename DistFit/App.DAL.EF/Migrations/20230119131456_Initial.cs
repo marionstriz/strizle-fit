@@ -7,10 +7,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace App.DAL.EF.Migrations
 {
-    /// <inheritdoc />
     public partial class Initial : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -467,7 +465,7 @@ namespace App.DAL.EF.Migrations
                         column: x => x.PerformanceId,
                         principalTable: "Performances",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_SetEntries_Units_QuantityUnitId",
                         column: x => x.QuantityUnitId,
@@ -692,7 +690,6 @@ namespace App.DAL.EF.Migrations
                 column: "UserExerciseId");
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

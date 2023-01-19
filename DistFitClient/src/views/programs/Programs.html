@@ -16,19 +16,17 @@
             <div class="card-body pt-3">
 
                 <h4>My Saved Programs</h4>
-                    <table class="table">
+                    <table class="table table-striped">
                         <thead>
                           <tr>
                             <th scope="col">Name</th>
-                            <th scope="col">Description</th>
                             <th scope="col">Duration</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr repeat.for="program of programs">
-                            <td>...</td>
-                            <td>...</td>
-                            <td>...</td>
+                            <td>${program.name}</td>
+                            <td>${program.duration} ${program.durationUnit.name.toLowerCase()}${program.duration > 1 ? 's' : ''}</td>
                           </tr>
                         </tbody>
                       </table>

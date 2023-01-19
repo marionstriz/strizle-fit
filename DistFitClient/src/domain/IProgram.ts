@@ -4,7 +4,7 @@ export interface IProgram {
     id?: string,
     name: string,
     description: string,
-    duration: number,
+    duration?: number,
     durationUnitId: number,
     durationUnit?: IUnit
 }

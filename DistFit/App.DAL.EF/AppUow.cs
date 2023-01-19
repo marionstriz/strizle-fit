@@ -37,7 +37,7 @@ public class AppUow : BaseUow<AppDbContext>, IAppUnitOfWork
 
     private IProgramRepository? _programs;
     public IProgramRepository Programs 
-        => _programs ??= new ProgramRepository(UowDbContext, new ProgramMapper(_mapper));
+        => _programs ??= new ProgramRepository(UowDbContext, new ProgramMapper(_mapper), new ProgramSavedMapper(_mapper));
 
     private IProgramSavedRepository? _programsSaved;
     public IProgramSavedRepository ProgramsSaved 

@@ -31,12 +31,13 @@
                 </div>
                 <div if.bind="!measurementType">
                     <h4>${message}</h4>
-                    <table if.bind="measurements.length !== 0" class="table">
+                    <table if.bind="measurements.length !== 0" class="table table-striped">
                         <thead>
                           <tr>
                             <th scope="col">Type</th>
                             <th scope="col">Value</th>
                             <th scope="col">Measured</th>
+                            <th></th>
                           </tr>
                         </thead>
                         <tbody>
@@ -44,6 +45,11 @@
                             <td>${msrm.measurementType.name}</td>
                             <td>${msrm.value + msrm.valueUnit.symbol}</td>
                             <td>${toLocaleDateString(msrm.measuredAt)</td>
+                            <td class="d-flex justify-content-end">
+                                <button click.trigger="deleteMeasurementAsync($index)" class="btn close delete-btn-${$index}" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </td>
                           </tr>
                         </tbody>
                       </table>

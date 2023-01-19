@@ -10,7 +10,7 @@
             <div>
                 <h4 if.bind="performance">${performance.userExercise.exerciseType.name} Entries - ${toLocaleDateString(performance.performedAt)}</h4>
                 <p if.bind="error" class="text-danger">${error}</p>
-                <table class="table">
+                <table class="table table-striped">
                     <thead>
                       <tr>
                         <th scope="col">Entry Nr.</th>
@@ -24,7 +24,7 @@
                             <th scope="row">${$index + 1}</th>
                             <td>${set.quantity + set.quantityUnit.symbol}</td>
                             <td if.bind="set.weight !== undefined">${set.weight + set.weightUnit.symbol}</td>
-                            <td><button click.trigger="deleteSetAsync($index)" class="btn close delete-btn-${$index}" aria-label="Close">
+                            <td class="d-flex justify-content-end"><button click.trigger="deleteSetAsync($index)" class="btn close delete-btn-${$index}" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button></td>
                         </tr>

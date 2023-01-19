@@ -13,6 +13,7 @@ export class Measurements {
     private subscriptions: IDisposable[] = [];
     successMsg?: string;
     message?: string;
+    error?: string;
 
     measurementType: IMeasurementType | null = null;
     measurements: IMeasurement[] | null = null;
@@ -45,6 +46,8 @@ export class Measurements {
     }
 
     async loading(params: Params) {
+        if (!this.identityService.identityState.user) return;
+
         if (!params.id) {
             this.toRecentMeasurementsAsync();
             return;
@@ -58,6 +61,23 @@ export class Measurements {
 
         if (params.confirmed === 'scsa') {
             this.success('Measurement added');
+        }
+    }
+
+    async deleteMeasurementAsync(index: number) {
+        this.error = undefined;
+        let btn = document.querySelector('.delete-btn-' + index);
+        let initialInnerHtml = btn!.innerHTML;
+        btn!.innerHTML = '...';
+
+        let msrm = this.measurements!.at(index);
+
+        let res = await this.measurementService.deleteAsync(msrm!.id!, this.identityService);
+        if (res.error) {
+            this.error = 'Delete failed, please try again';
+            btn!.innerHTML = initialInnerHtml;
+        } else {
+            this.measurements!.splice(index, 1);
         }
     }
 

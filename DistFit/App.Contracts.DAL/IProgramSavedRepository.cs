@@ -12,4 +12,5 @@ public interface IProgramSavedRepository<TEntity> : IOwnedEntityRepository<TEnti
     where TEntity : class, IDomainEntityId
 {
     Task<IEnumerable<TEntity>> GetAllByUserAndGroupsAsync(ClaimsPrincipal user, bool noTracking);
+    Task<TEntity?> GetProgramSaveByProgramAndUserIdAsync(Guid programId, Guid userId, bool noTracking = true);
 }

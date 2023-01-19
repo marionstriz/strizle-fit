@@ -77,14 +77,15 @@ export class Sets {
         if (this.load) return;
         this.load = true;
         let btn = document.querySelector('.delete-btn-' + index);
+        let initialInnerHtml = btn!.innerHTML;
         btn!.innerHTML = '...';
 
         let set = this.sets.at(index);
 
         let res = await this.setService.deleteAsync(set!.id!, this.identityService);
         if (res.error) {
-            console.log(set!.id!);
             this.error = 'Delete failed, please try again';
+            btn!.innerHTML = initialInnerHtml;
         } else {
             this.sets.splice(index, 1);
         }

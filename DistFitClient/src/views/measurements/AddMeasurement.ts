@@ -33,6 +33,8 @@ export class AddMeasurement {
         @IRouter private router: IRouter) {
 
         this.load = false;
+        if (!identityService.identityState.user) return;
+        
         unitService.getAllAsync(identityService).then((res) => {
             if (res.error != null) {
                 identityService.logout();
@@ -84,9 +86,13 @@ export class AddMeasurement {
         }
 
         this.load = true;
-        await this.measurementService.addAsync(measurement, this.identityService);
+        let res = await this.measurementService.addAsync(measurement, this.identityService);
 
-        await this.router.load('/measurements/graphs/' + this.typeId! + '/scsa');
+        if (res.error) {
+            this.error = 'Please enter all values';
+            this.load = false;
+            
+        } else await this.router.load('/measurements/graphs/' + this.typeId! + '/scsa');
     }
 
     async backToListAsync() {

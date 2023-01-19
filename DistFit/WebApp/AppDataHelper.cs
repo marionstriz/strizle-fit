@@ -6,6 +6,7 @@ using Base.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileSystemGlobbing.Internal.PatternContexts;
+using NuGet.Protocol.Plugins;
 
 namespace WebApp;
 
@@ -173,6 +174,33 @@ public static class AppDataHelper
             };
             context.Units.Add(inch);
             
+            var weekLangStr = new LangStr("Week", LangStr.DefaultCulture);
+            weekLangStr.SetTranslation("Nädal", "et-EE");
+            var week = new Unit
+            {
+                Name = weekLangStr,
+                Symbol = new LangStr("week", LangStr.DefaultCulture)
+            };
+            context.Units.Add(week);
+            
+            var monthLangStr = new LangStr("Month", LangStr.DefaultCulture);
+            monthLangStr.SetTranslation("Kuu", "et-EE");
+            var month = new Unit
+            {
+                Name = monthLangStr,
+                Symbol = new LangStr("month", LangStr.DefaultCulture)
+            };
+            context.Units.Add(month);
+            
+            var dayLangStr = new LangStr("Day", LangStr.DefaultCulture);
+            dayLangStr.SetTranslation("Päev", "et-EE");
+            var day = new Unit
+            {
+                Name = dayLangStr,
+                Symbol = new LangStr("day", LangStr.DefaultCulture)
+            };
+            context.Units.Add(day);
+            
             var weightLangStr = new LangStr("Weight", LangStr.DefaultCulture);
             weightLangStr.SetTranslation("Kaal", "et-EE");
             var weight = new MeasurementType{Name = weightLangStr};
@@ -268,6 +296,23 @@ public static class AppDataHelper
                 WeightUnitId = kg.Id
             };
             context.SetEntries.Add(mastriSetEntry3);
+
+            var program1 = new App.Domain.Program
+            {
+                Name = new LangStr("Chicken-Legs-NoMo", LangStr.DefaultCulture),
+                Description = new LangStr("Tired of being told to never skip leg day? This is the ultimate program to achieve all your lower body goals - start now!", LangStr.DefaultCulture),
+                Duration = 3,
+                DurationUnitId = month.Id
+            };
+            context.Programs.Add(program1);
+
+            var programSave1 = new ProgramSaved
+            {
+                AppUserId = user.Id,
+                ProgramId = program1.Id,
+                IsCreator = true
+            };
+            context.ProgramsSaved.Add(programSave1);
 
             context.SaveChanges();
         }

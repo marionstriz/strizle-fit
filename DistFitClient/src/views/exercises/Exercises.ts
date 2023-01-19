@@ -14,6 +14,7 @@ export class Exercises {
     private subscriptions: IDisposable[] = [];
 
     message?: string;
+    error?: string;
 
     exerciseType: IExerciseType | null = null;
 
@@ -40,6 +41,23 @@ export class Exercises {
             subscription.dispose();
         });
         this.subscriptions = [];
+    }
+
+    async deletePerformanceAsync(index: number) {
+        this.error = undefined;
+        let btn = document.querySelector('.delete-btn-' + index);
+        let initialInnerHtml = btn!.innerHTML;
+        btn!.innerHTML = '...';
+
+        let perf = this.performances.at(index);
+
+        let res = await this.performanceService.deleteAsync(perf!.id!, this.identityService);
+        if (res.error) {
+            this.error = 'Delete failed, please try again';
+            btn!.innerHTML = initialInnerHtml;
+        } else {
+            this.performances.splice(index, 1);
+        }
     }
 
     async newExerciseTypeReceived(type: IExerciseType | null) {

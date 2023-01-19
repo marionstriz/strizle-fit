@@ -47,7 +47,7 @@ public class ProgramSavedController : ControllerBase
     public async Task<ActionResult<IEnumerable<App.Public.DTO.v1.ProgramSaved>>> GetSavedPrograms()
     {
         return Ok((await _bll.ProgramsSaved
-            .GetAllByUserAndGroupsAsync(User, true))
+            .GetAllAsync(User.GetUserId(), true))
             .Select(x => _mapper.Map(x)));
     }
 

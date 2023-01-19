@@ -80,6 +80,11 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
         {
             relationship.DeleteBehavior = DeleteBehavior.Restrict;
         }
+
+        builder.Entity<Performance>()
+            .HasMany(p => p.SetEntries)
+            .WithOne(s => s.Performance)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 
     private static string? SerialiseLangStr(LangStr? lStr)
